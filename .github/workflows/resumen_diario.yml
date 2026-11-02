@@ -63,6 +63,10 @@ jobs:
           path: |
             vista_previa/diagnostico.json
             vista_previa/diagnostico.html
+            vista_previa/envio.json
+            vista_previa/resumen.html
+            vista_previa/resumen.txt
+            vista_previa/todos_eventos.html
           retention-days: 14
           if-no-files-found: ignore
       - name: Indicar resultado
@@ -73,3 +77,6 @@ jobs:
           echo '### Resumen deportivo' >> "$GITHUB_STEP_SUMMARY"
           echo "Estado del paso de envío: $RESULTADO_ENVIO" >> "$GITHUB_STEP_SUMMARY"
           echo 'Horario diario definido en schedule (Europe/Madrid). Un fallo parcial de las fuentes principales también marca error.' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f vista_previa/envio.json ]; then
+            echo 'Diagnóstico SMTP y copia del resumen disponibles en el artefacto diagnostico de esta ejecución.' >> "$GITHUB_STEP_SUMMARY"
+          fi

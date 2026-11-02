@@ -66,8 +66,9 @@ class CorreoTests(unittest.TestCase):
         smtp.login.assert_called_once_with(ENV['SMTP_USERNAME'],'abcdefghijklmnop')
         smtp.send_message.assert_called_once()
 
+    @patch('resumen.correo.time.sleep')
     @patch('resumen.correo.smtplib.SMTP_SSL')
-    def test_fallos_sanitizados_sin_reintentos(self, smtp_class):
+    def test_fallos_sanitizados_y_reintento_previo_seguro(self, smtp_class, sleep):
         for error in (smtplib.SMTPAuthenticationError(535,b'PASSWORD_SECRETA'),
                       smtplib.SMTPDataError(554,b'PASSWORD_SECRETA'), OSError('PASSWORD_SECRETA')):
             smtp_class.reset_mock()
@@ -76,7 +77,7 @@ class CorreoTests(unittest.TestCase):
                 with self.assertRaises(ErrorCorreo) as raised:
                     enviar_informe(self.report)
             self.assertNotIn('PASSWORD_SECRETA',str(raised.exception))
-            smtp_class.assert_called_once()
+            self.assertEqual(smtp_class.call_count,3 if type(error) is OSError else 1)
 
     @patch('resumen.correo.smtplib.SMTP_SSL')
     def test_destinatario_rechazado_y_quit_tras_aceptacion(self, smtp_class):

@@ -299,9 +299,10 @@ Sin `--enviar` no se conecta con Gmail. Tampoco se consultan las fuentes deporti
 se solicita envío pero falta la configuración de correo.
 Si falla una fuente se envía el resumen parcial; si fallan ambas se envía el aviso de fallo.
 En ambos casos la ejecución termina en error, aunque el correo se haya enviado.
-Un fallo SMTP también produce salida 1. No se reintenta automáticamente un envío, para evitar
-duplicados cuando la conexión se interrumpe después de entregar el mensaje al servidor.
-Los errores de autenticación o entrega no muestran contraseñas ni respuestas crudas del servidor.
+Un fallo SMTP también produce salida 1. Se permiten hasta tres intentos solo ante un rechazo
+temporal explícito (4xx) o una interrupción de red anterior a la entrega. Si la conexión cae durante
+la entrega sin respuesta definitiva, no se reintenta: el correo podría haber sido aceptado.
+Los errores muestran fase y códigos SMTP, nunca contraseñas, direcciones ni respuestas crudas.
 
 ### Verificación
 
@@ -660,3 +661,15 @@ Efes, Partizan, Žalgiris y Virtus reciben reconocimiento histórico de +0,35 po
 En fútbol, una diferencia de diez posiciones o más, con al menos cuatro victorias del mejor clasificado y cuatro derrotas del otro en sus últimos cinco partidos validados de la misma liga, limita a +0,6 el extra contextual. No resta a la base deportiva. No actúa con forma parcial, distancia menor o rachas no opuestas. El motivo y la moderación se conservan en el diagnóstico y las tarjetas.
 
 La regresión compara las mismas entradas fechadas de los días 27 y 28 (87 eventos), con sus fuentes guardadas y sin red. Una vista previa con la agenda guardada del 30 y contexto consultado después se etiqueta como simulación actual, nunca como reproducción del correo matinal. Las pruebas cubren simetría de parejas, alias, ámbito de selecciones, controles sin rivalidad, NBA Cup por encuentro, fase desconocida, metadatos sin spoilers, preferencias y moderación de forma.
+
+## Incidencia de envío — 02/11/2026
+
+El historial público muestra éxito el 31/10 y fallo los días 1 y 2/11 con la misma versión `5b73e20`. El log aportado confirma que se guardó el resumen y después hubo un fallo SMTP. El mensaje anterior ocultaba la clase/código del error; por tanto no permite atribuirlo a contraseña, cuota, contenido o red. No se ha probado un envío real durante la reparación ni se han leído credenciales. La causa original sigue pendiente de una respuesta SMTP identificable.
+
+El envío registra ahora fase (conexión, autenticación, entrega), tipo fijo de error, código SMTP y código ampliado, con lista cerrada de campos. No se conserva la respuesta libre del servidor, que puede incluir datos personales. Con `--salida`, se escribe `envio.json` tanto ante aceptación como ante error. El fallo al guardar ese diagnóstico no cambia una entrega ya aceptada. Un cierre QUIT fallido después de aceptación sigue sin marcar fallo ni repetir el correo.
+
+Reintentos: máximo tres conexiones, con esperas de 5 y 15 segundos, conservando el mensaje y su Message-ID. Solo se repite tras un rechazo explícito temporal 4xx o una interrupción de red previa a la entrega. Un error 5xx, un problema de certificado, un protocolo no soportado o una desconexión de entrega con resultado incierto no se reintentan. El Message-ID no sustituye esta precaución ni garantiza deduplicación al repetir un workflow manualmente.
+
+El artefacto `diagnostico-<run>-<intento>` conserva ahora `envio.json`, la copia HTML/texto del resumen y el listado, además del diagnóstico deportivo, durante 14 días. Se publica incluso cuando falla el paso. Esto permite acceder al contenido generado y al código SMTP sin volver a enviar el correo. No se ha cambiado el horario del workflow ni se ha lanzado un envío de prueba.
+
+Referencias: [excepciones SMTP de Python](https://docs.python.org/3.12/library/smtplib.html), [códigos SMTP de Gmail](https://support.google.com/mail/answer/3726730?hl=en). La próxima ejecución permitirá verificar recuperación o identificar el rechazo permanente concreto; los logs antiguos no contienen ese dato.

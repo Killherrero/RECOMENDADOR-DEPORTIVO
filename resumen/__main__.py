@@ -64,11 +64,23 @@ def main():
         logging.info('Vista previa guardada en %s.', args.salida)
     if args.enviar:
         try:
-            enviar_informe(report)
+            estado_envio = enviar_informe(report)
         except (ErrorConfiguracion, ErrorCorreo) as error:
+            guardar_estado_envio(args.salida, getattr(error, 'diagnostico', {}) or {'estado':'fallido'})
             logging.error('%s', error)
             return 1
+        if isinstance(estado_envio, dict):
+            guardar_estado_envio(args.salida, estado_envio)
     return 1 if result['errores'] else 0
+
+
+def guardar_estado_envio(carpeta, estado):
+    if carpeta:
+        import json
+        try:
+            (carpeta/'envio.json').write_text(json.dumps(estado, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+        except OSError:
+            logging.warning('No se pudo guardar el diagnóstico del envío; el estado de entrega no cambia.')
 
 if __name__ == '__main__':
     raise SystemExit(main())
