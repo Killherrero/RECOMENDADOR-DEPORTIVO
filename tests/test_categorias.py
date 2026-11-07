@@ -42,12 +42,12 @@ class CategoriasTests(unittest.TestCase):
         self.assertEqual(result['plan'],{})
         self.assertEqual(recomendar_eventos([tenis('Torneo de Viena 1ª Ronda',local='Jugador A',visitante='Jugador B')],fecha=date(2026,10,26))['filtrados'],[])
 
-    def test_liga_sin_regla_tiene_base_neutral(self):
+    def test_liga_neutral_y_reconocimiento_argentino_acotado(self):
         e={'hora':'23:00','deporte':'Fútbol','competicion':'Primera División Argentina Torneo Clausura',
            'local':'Unión Santa Fe','visitante':'Estudiantes LP','canales':['Fanatiz']}
         result=recomendar_eventos([e],fecha=date(2026,10,26))['filtrados'][0]
-        self.assertEqual(result['score'],3.5)
-        self.assertEqual(result['prioridad'],3.0) # La limitación horaria cambia encaje, no interés.
+        self.assertEqual(result['score'],3.9) # Estudiantes LP: reconocimiento editorial +0,35.
+        self.assertEqual(result['prioridad'],3.4) # La limitación horaria cambia encaje, no interés.
         self.assertEqual(calculate_score({**e,'competicion':'Conference League'}),5.0)
 
     def test_alias_y_puntuaciones_equivalentes_sin_inventar_favoritos(self):

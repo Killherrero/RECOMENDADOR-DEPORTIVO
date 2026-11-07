@@ -7,6 +7,18 @@ DURACIONES = {'Fútbol': 120, 'Baloncesto': 120, 'Tenis': 150,
               'Automovilismo': 180, 'Balonmano': 90}
 MINIMO_VISION = 30
 
+
+def duracion_evento(evento):
+    from .sesiones import sesion_motor
+    sesion = sesion_motor(evento)
+    if sesion:
+        return sesion['duracion']
+    if evento.get('deporte') == 'Pádel':
+        return 300  # Final por selecciones: varias eliminatorias, duración incierta.
+    if evento.get('deporte') == 'Baloncesto' and 'nba' in evento.get('competicion','').lower():
+        return 150
+    return DURACIONES.get(evento.get('deporte'),120)
+
 def preparar_horario(evento, fecha, ahora=None):
     """Devuelve si se pueden ver al menos 30 minutos; añade datos para la agenda.
 
@@ -30,7 +42,7 @@ def preparar_horario(evento, fecha, ahora=None):
         cierre = datetime.combine(dia, time(1), MADRID_TZ)
     else:
         return False
-    duracion = 150 if evento['deporte'] == 'Baloncesto' and 'nba' in evento['competicion'].lower() else DURACIONES.get(evento['deporte'], 120)
+    duracion = duracion_evento(evento)
     fin = datetime.fromtimestamp(inicio.timestamp() + duracion * 60, MADRID_TZ)
     inicio_vision = max(inicio.timestamp(), ahora.timestamp()) if ahora else inicio.timestamp()
     fin_vision = min(fin.timestamp(), cierre.timestamp())
@@ -54,5 +66,5 @@ def intervalo(evento):
     if 'inicio_vision' in evento:
         return evento['inicio_vision'].timestamp() / 60, evento['fin_vision'].timestamp() / 60
     inicio = orden_inicio(evento)
-    duracion = 150 if evento['deporte'] == 'Baloncesto' and 'nba' in evento.get('competicion', '').lower() else DURACIONES.get(evento['deporte'], 120)
+    duracion = duracion_evento(evento)
     return inicio, inicio + duracion

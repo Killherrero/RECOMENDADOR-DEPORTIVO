@@ -5,7 +5,7 @@ from .explicaciones import frases_explicacion
 from .canales import plataforma_destacada
 
 FUENTE = 'https://www.futbolenlatv.es/deporte'
-ICONOS = {'Fútbol':'⚽', 'Baloncesto':'🏀', 'Tenis':'🎾', 'Automovilismo':'🏁', 'Balonmano':'🤾'}
+ICONOS = {'Fútbol':'⚽', 'Baloncesto':'🏀', 'Tenis':'🎾', 'Pádel':'🎾', 'Automovilismo':'🏁', 'Motociclismo':'🏍️', 'Balonmano':'🤾'}
 
 def texto(valor):
     return escape(str(valor), quote=True)
@@ -33,6 +33,9 @@ def categoria_html(evento):
     return ''
 
 def boton_calendario(evento=None, enlace=None, tramo=False):
+    from .estado_eventos import programable
+    if evento and not programable(evento):
+        return ''
     from .calendario import enlace_calendario
     url = enlace if enlace is not None else enlace_calendario(evento or {})
     if not url:return ''
@@ -51,7 +54,17 @@ def desglose_html(evento):
     d = evento.get('desglose')
     if not d:return ''
     html = (f'<div style="font-size:12px;line-height:1.6;margin-top:8px;">'
-            f'Interés deportivo {d["deportivo"]:.1f} · Afinidad {d["afinidad"]:+.1f}</div>')
+            f'Interés deportivo {d["deportivo"]:.2f} · Afinidad {d["afinidad"]:+.2f}'
+            '<br>Nota final redondeada a una décima. Los ajustes deportivos ya están incluidos.</div>')
+    if evento.get('favorito_declarado'):
+        html += etiqueta('Tu equipo · ' + evento['favorito_declarado'], '#e7ebf1', '#263e59')
+    if evento.get('sesion_motor'):
+        s = evento['sesion_motor']
+        html += etiqueta(s['categoria'] + ' · ' + s['tipo'] + f' · {s["duracion"]} min estimados', '#f3e5d1', '#694716')
+    if evento.get('perfiles_futbol'):
+        html += '<div style="font-size:11px;line-height:1.6;">Reconocimiento incluido en el interés deportivo: '
+        html += ' · '.join(f'<a href="{texto(p["fuente"])}" style="color:inherit;">{texto(p["nombre"])}</a>' for p in evento['perfiles_futbol'])
+        html += '. No representa clasificación ni forma actual.</div>'
     c = evento.get('evaluacion_contexto', {})
     if c.get('fase_nba'):
         html += etiqueta('NBA Cup · ' + c['fase_nba'] if evento.get('contexto', {}).get('copa') else 'NBA · liga regular', '#ffe4c7', '#82400d')
@@ -258,6 +271,12 @@ def crear_html(asunto, secciones, resultado, todos):
                            + '<br>'.join(texto(l) for l in cobertura) + '</div></div></div>')
         elif titulo == 'Cobertura NBA':
             continue  # La cobertura ya figura dentro del bloque NBA.
+        elif titulo == 'Tus equipos · para seguir':
+            favoritos = [e for e in events.get('filtrados',[]) if e.get('favorito_declarado') and e not in events.get('seleccionados',[])]
+            bloques.append('<section style="margin:22px 0;padding:18px;border:2px solid #aeb9c8;border-radius:14px;background:#edf1f6;">'
+                           '<h2 style="font-size:20px;margin:0 0 8px;">Tus equipos · para seguir</h2>'
+                           '<p style="font-size:12px;">Tus favoritos, aunque no alcancen el plan principal. Elige si quieres reservarles tiempo.</p>'
+                           + ''.join(tarjeta_evento(e) for e in favoritos) + '</section>')
         elif titulo == 'Tu planning flexible':
             bloques.append('<div id="bloque-planning" style="margin:26px 0;border:2px solid #287b79;border-radius:16px;overflow:hidden;background:#f0f8f7;">'
                            '<div style="padding:22px;background:#153e43;color:#ffffff;border-bottom:5px solid #7bd3bc;">'

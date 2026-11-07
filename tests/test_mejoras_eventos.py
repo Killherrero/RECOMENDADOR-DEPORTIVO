@@ -49,7 +49,7 @@ class MejorasEventosTests(unittest.TestCase):
     def test_estudiantes_un_unico_bonus(self):
         base=calculate_score(evento('Equipo A','Equipo B','Primera FEB',deporte='Baloncesto'))
         est=calculate_score(evento('Estudiantes','Equipo B','Primera FEB',deporte='Baloncesto'))
-        self.assertAlmostEqual(est-base,0.6)
+        self.assertAlmostEqual(est-base,1.3)
 
     def test_competiciones_no_se_descartan_antes_de_puntuar(self):
         for comp in ['Eurocopa','Copa América','Copa del Mundo','World Cup','Eredivisie','La Liga EA Sports']:

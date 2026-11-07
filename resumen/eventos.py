@@ -9,6 +9,8 @@ from .config import MADRID_TZ
 from .horarios import intervalo, orden_inicio, preparar_horario
 from .categorias import categoria_tenis, bonus_categoria_tenis
 from .puntuacion import valorar, UMBRAL_PLAN, UMBRAL_ALTERNATIVAS, umbral_plan
+from .estado_eventos import programable, estado_evento
+from .sesiones import final_padel_espana, sesion_motor
 
 from .preferencias_eventos import (
     EVENT_DURATION,
@@ -185,6 +187,8 @@ def normalize_text(text):
                    if unicodedata.category(c) != 'Mn')
 
 TEAM_ALIASES = {
+    'dortmund':'borussia dortmund', 'bvb':'borussia dortmund', 'bvb dortmund':'borussia dortmund',
+    'as roma':'roma', 'as roma fc':'roma',
     'at madrid': 'atletico madrid', 'atletico de madrid': 'atletico madrid',
     'club atletico de madrid': 'atletico madrid',
     'barca': 'fc barcelona', 'barcelona': 'fc barcelona',
@@ -264,7 +268,7 @@ def build_daily_plan(events):
     # --------------------------------------------------
     top_events = [
         e for e in events
-        if e["score"] >= umbral_plan(e)
+        if programable(e) and e["score"] >= umbral_plan(e)
     ]
 
     if not top_events:
@@ -336,6 +340,10 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
         raise ValueError('La hora de ejecución debe incluir zona horaria.')
     fecha = fecha or (ahora or datetime.now(MADRID_TZ)).astimezone(MADRID_TZ).date()
     filtered_events = []
+    excluidos = []
+    def descartar(e, motivo):
+        excluidos.append({**{k:e.get(k,'') for k in ('hora','fecha','deporte','competicion','local','visitante','descripcion')},
+                          'estado':estado_evento(e), 'motivo':motivo})
     for e in events:
         deporte = e["deporte"]
         comp = normalize_competition(e["competicion"])
@@ -347,12 +355,32 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
     
     
         # WNBA no es NBA: excluirla antes de cualquier filtro amplio de baloncesto.
-        if 'wnba' in comp or is_female(e) or not valid_time(e["hora"]):
+        if not programable(e):
+            descartar(e, 'Evento ' + estado_evento(e))
+            continue
+        padel = final_padel_espana(e)
+        if 'wnba' in comp or (is_female(e) and not padel) or not valid_time(e["hora"]):
+            descartar(e, 'Categoría excluida o sin hora válida')
             continue
         if not preparar_horario(e, fecha, ahora):
+            descartar(e, 'Fuera de disponibilidad o ya terminado')
+            continue
+        if padel:
+            if e.get('en_curso') and normalize_text(e.get('estado','')) not in ('en curso','live','in progress'):
+                descartar(e, 'Final de pádel ya iniciada, sin directo confirmado')
+                continue
+            filtered_events.append(e)
+            continue
+        if deporte == 'Motociclismo':
+            sesion = sesion_motor(e)
+            if sesion and sesion['categoria'] == 'MotoGP' and sesion['tipo'] in ('clasificacion','sprint','carrera'):
+                filtered_events.append(e)
+            else:
+                descartar(e, 'Solo MotoGP competitivo autorizado')
             continue
     
         if deporte in {"Fútbol Sala", "Waterpolo", "Hockey Patines", "Atletismo", "Rugby U", "Boxeo", "Ishockey", "Béisbol"}:
+            descartar(e, 'Deporte no incluido en tus preferencias')
             continue
     
         if deporte == "Automovilismo":
@@ -360,11 +388,19 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
             continue
     
         if deporte == "Fútbol":
-            if "u23" in comp or is_lower_division_football(e):
+            from .rivalidades import valorar_rivalidad
+            rivalidad = valorar_rivalidad(e)
+            excepcion_derbi = (rivalidad['estado'] == 'verificada' and
+                               rivalidad.get('ambito','clubes') == 'clubes' and
+                               any(x in comp for x in ('primera federacion','segunda federacion','tercera federacion','regional')))
+            if "u23" in comp or (is_lower_division_football(e) and not excepcion_derbi):
+                descartar(e, 'Categoría inferior sin derbi documentado')
                 continue
-            if not any(normalize_competition(x) in comp for x in ALLOWED_FOOTBALL_COMPETITIONS):
+            if not excepcion_derbi and not any(normalize_competition(x) in comp for x in ALLOWED_FOOTBALL_COMPETITIONS):
+                descartar(e, 'Competición no autorizada')
                 continue
             if any(normalize_competition(x) in comp for x in EXCLUDED_FOOTBALL_COMPETITIONS):
+                descartar(e, 'Competición excluida')
                 continue
             filtered_events.append(e)
             continue
@@ -377,7 +413,8 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
                 is_relevant_baloncesto = True
             if "endesa" in comp or "acb" in comp or "euroliga" in comp or "euroleague" in comp:
                 is_relevant_baloncesto = True
-            if "estudiantes" in local or "estudiantes" in visitante:
+            from .favoritos import favorito_declarado
+            if favorito_declarado(e) == 'Estudiantes':
                 is_relevant_baloncesto = True
             if "espana" in local or "espana" in visitante:
                 is_relevant_baloncesto = True
@@ -386,11 +423,15 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
     
             if is_relevant_baloncesto:
                 filtered_events.append(e)
+            else:
+                descartar(e, 'Baloncesto fuera de tus competiciones y equipos')
             continue
     
         if deporte == "Balonmano":
             if local == "espana" or visitante == "espana":
                 filtered_events.append(e)
+            else:
+                descartar(e, 'Balonmano sin España')
             continue
     
         if deporte == "Tenis":
@@ -402,6 +443,10 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
                 or (categoria is not None and (preseleccion_tenis or ranking_relevante))
                 or (categoria is not None and knockout_bonus(e) >= 2)):
                 filtered_events.append(e)
+            else:
+                descartar(e, 'Tenis sin categoría o participantes relevantes')
+            continue
+        descartar(e, 'Deporte o competición no autorizados')
     for e in filtered_events:
         e.update(evaluar_evento(e))
         e['ajuste_horario'] = e['desglose']['horario']
@@ -419,5 +464,5 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
     explicar_agenda(filtered_events, daily_plan, event_key)
     from .planning import crear_planning
     flexible = crear_planning(filtered_events, selected_events, event_key)
-    return {**({'planning': flexible} if flexible else {}), 'filtrados': filtered_events, 'plan': daily_plan,
+    return {**({'planning': flexible} if flexible else {}), **({'excluidos':excluidos} if excluidos else {}), 'filtrados': filtered_events, 'plan': daily_plan,
             'seleccionados': selected_events, 'alternativas': sorted(other_top_events[:MAX_OTHER_EVENTS], key=orden_inicio)}

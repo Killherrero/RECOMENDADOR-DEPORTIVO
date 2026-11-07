@@ -55,6 +55,12 @@ def tema_evento(e):
         return '#e2f1f0', '#286c69', 'Liga / fútbol'
     if deporte == 'tenis':
         return '#f1f7b5', '#566400', 'Tenis'
+    if deporte == 'padel':
+        return '#e1f2d8', '#47742c', 'Pádel'
+    if deporte == 'motociclismo':
+        return '#dbe8f3', '#285674', 'MotoGP'
+    if deporte == 'automovilismo':
+        return '#f5e3d5', '#a05224', 'Motor'
     if deporte == 'baloncesto':
         if 'nba' in comp:
             return '#ffdfc1', '#b45309', 'NBA'

@@ -3,6 +3,7 @@ from datetime import datetime
 from .horarios import intervalo
 from .config import MADRID_TZ
 from .calendario import enlace_calendario
+from .estado_eventos import programable
 
 
 def nombre(e):
@@ -16,7 +17,7 @@ def reloj(minutos, e):
 
 
 def crear_planning(eventos, seleccionados, clave):
-    principales = sorted(seleccionados, key=lambda e: intervalo(e)[0])
+    principales = sorted((e for e in seleccionados if programable(e)), key=lambda e: intervalo(e)[0])
     ids = {clave(e) for e in principales}
     bloques = []
     ocupados = []
@@ -38,7 +39,7 @@ def crear_planning(eventos, seleccionados, clave):
         agregar(e, 'Cita principal', a, b, 'Prioriza esta cita. Final estimado.' if b == intervalo(e)[1]
                 else 'Cambia a la siguiente cita a esta hora; dejarías el final sin ver.')
 
-    secundarios = sorted((e for e in eventos if clave(e) not in ids and e['score'] >= 4.5
+    secundarios = sorted((e for e in eventos if programable(e) and clave(e) not in ids and e['score'] >= 4.5
                           and not e.get('madrugada')),
                          key=lambda e: -e.get('prioridad', e['score']))
     usados = set()

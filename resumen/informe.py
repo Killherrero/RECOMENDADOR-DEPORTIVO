@@ -15,7 +15,7 @@ def linea_evento(event):
         texto += f" · {event['nivel']}"
     if event.get('desglose'):
         d = event['desglose']
-        texto += f" · Interés deportivo {d['deportivo']:.1f} · Afinidad {d['afinidad']:+.1f}"
+        texto += f" · Interés deportivo {d['deportivo']:.2f} · Afinidad {d['afinidad']:+.2f} (ajustes deportivos ya incluidos; nota redondeada)"
         if d.get('preferencia_deporte'):
             texto += ' · Preferencia tenis −0,4 (incluida en afinidad); plan desde 7,5/10'
     contexto = event.get('evaluacion_contexto', {})
@@ -92,6 +92,9 @@ def contenido(resultado):
         agenda = [f'{franja.capitalize()}: {linea_evento(e)}' for franja, e in plan.items() if franja != 'imprescindible']
         sections.append(('Plan principal del día', agenda or ['Sin otros eventos en el plan.']))
         sections.append(('Alternativas', [linea_evento(e) for e in events['alternativas']] or ['Sin alternativas que alcancen el umbral.']))
+        favoritos = [e for e in events.get('filtrados',[]) if e.get('favorito_declarado') and e not in events.get('seleccionados',[])]
+        if favoritos:
+            sections.append(('Tus equipos · para seguir', [linea_evento(e) for e in favoritos]))
         sections.append(('Información', ['Notas personales sobre diez: interés deportivo y afinidad. El acceso y el horario solo ajustan el encaje en la agenda.',
                          '8–10: cita destacada · 6–7,9: buena opción · 4–5,9: de fondo · menos de 4: prescindible.',
                          'Alternativas seleccionadas por interés y encaje, presentadas por hora. Horarios de Europe/Madrid.',
@@ -114,6 +117,7 @@ def contenido(resultado):
         if titulo.startswith('📺'): return 30
         if titulo in ('Tu planning flexible', 'Plan principal del día', 'Alternativas', 'Cobertura de la agenda'): return 40
         if titulo == 'Información': return 50
+        if titulo == 'Tus equipos · para seguir': return 45
         if titulo.startswith('Todos los eventos filtrados'): return 60
         if titulo == '⚽ Partidos del día': return 40
         return 0

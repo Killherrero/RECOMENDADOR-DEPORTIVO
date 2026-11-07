@@ -7,12 +7,14 @@ from .canales import plataforma_destacada
 from .contexto import valorar_contexto
 from .calidad_cruce import valorar_cruce
 from .rivalidades import valorar_rivalidad
+from .favoritos import favorito_declarado
+from .sesiones import sesion_motor, final_padel_espana
+from .reconocimiento import perfiles_futbol
 
 UMBRAL_PLAN = 6.5
 UMBRAL_PLAN_TENIS = 7.5
 PREFERENCIA_TENIS = -0.4
 UMBRAL_ALTERNATIVAS = 4.5
-FAVORITOS_FUTBOL = {'atletico madrid', 'aston villa'}
 REFERENTES_FUTBOL = {
     'real madrid','fc barcelona','atletico madrid','aston villa','bayern munich',
     'inter milan','ac milan','napoli','juventus','roma','arsenal','manchester united',
@@ -68,6 +70,8 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     motivos = []
     contexto = valorar_contexto(evento)
     jerarquia = 0.0
+    favorito = favorito_declarado(evento)
+    reconocidos_futbol = perfiles_futbol(evento)
     # El bonus de fase anterior distingue final, semifinal, cuartos y octavos.
     fase = {2.5:2.4, 2.0:1.6, 1.5:1.0, 1.0:0.6, 0.8:0.3}.get(ronda, 0)
     if contexto.get('fase_nba'):
@@ -78,9 +82,13 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         motivos.append(motivo)
         n = contar_referentes(local, visitante, REFERENTES_FUTBOL)
         cartel = 2.0 if n == 2 else 0.8 if n == 1 else 0
+        extra_reconocimiento = sum(p['puntos'] for p in reconocidos_futbol)
+        cartel = min(2.0, cartel + extra_reconocimiento)
+        if extra_reconocimiento:
+            motivos.append('Reconocimiento editorial moderado: ' + ', '.join(p['nombre'] for p in reconocidos_futbol))
         if n == 2:motivos.append('Duelo entre equipos de referencia')
         elif n == 1:motivos.append('Participa un equipo de referencia')
-        if local in FAVORITOS_FUTBOL or visitante in FAVORITOS_FUTBOL:
+        if favorito and favorito != 'España':
             afinidad = 1.3
             motivos.append('Juega uno de tus favoritos')
         else:
@@ -101,7 +109,9 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
             equipos = [identidad_basket(e) for e in (local, visitante)]
             referentes = REFERENTES_EUROLIGA if any(x in competicion for x in ('euroliga', 'euroleague')) else REFERENTES_ACB
             n = sum(e in referentes for e in equipos)
-            if 'estudiantes' in local or 'estudiantes' in visitante:afinidad = 0.6
+            if favorito == 'Estudiantes':
+                afinidad = 1.3
+                motivos.append('Juega tu Estudiantes; preferencia personal separada del nivel de la liga')
         cartel = 1.5 if n == 2 else 0.8 if n == 1 else 0
         if any(x in competicion for x in ('euroliga', 'euroleague')):
             reconocidos = sum(e in RECONOCIDOS_EUROLIGA for e in equipos)
@@ -146,9 +156,16 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         if 'figura' in perfiles: motivos.append('Figura del catálogo editorial de tenis')
         if n == 2: motivos.append('Ambos jugadores tienen perfil reconocido; se valora también al rival')
         elif n == 1: motivos.append('Un jugador reconocido; rival sin perfil en el catálogo')
-    elif sport == 'Automovilismo':
-        base = 4.7 if any(x in competicion for x in ['formula 1','f1']) else 3.5
-        motivos.append('Motor: interés secundario')
+    elif sport in ('Automovilismo', 'Motociclismo'):
+        sesion = sesion_motor(evento)
+        base = sesion['base'] if sesion else 4.7 if any(x in competicion for x in ['formula 1','f1']) else 3.5
+        fase = 0  # Final de temporada o GP no significa eliminatoria.
+        motivos.append('Motor: ' + sesion['tipo'] if sesion else 'Motor: sesión sin identificar')
+    elif sport == 'Pádel' and final_padel_espana(evento):
+        base = 5.8 if any(t in competicion for t in ('mundial','campeonato del mundo','world')) else 5.4
+        afinidad = .6
+        fase = 2.4
+        motivos.append('Final internacional de selecciones con España')
     elif sport == 'Balonmano':
         base = 4.2
         if local == 'espana' or visitante == 'espana':afinidad = 0.6
@@ -166,8 +183,8 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         motivos.append(f"{rivalidad['tipo']}: {rivalidad['nombre']}")
     motivos.extend(contexto['motivos'])
     motivos.extend(calidad['motivos'])
-    deportivo_basico = min(8.5, base + cartel - jerarquia + fase + rivalidad['ajuste'])
-    afinidad_basica = max(-deportivo_basico, min(10-deportivo_basico, afinidad))
+    deportivo_basico = round(min(8.5, base + cartel - jerarquia + fase + rivalidad['ajuste']),2)
+    afinidad_basica = round(max(-deportivo_basico, min(10-deportivo_basico, afinidad)),2)
     nota_basica = round(max(0, min(10, deportivo_basico + afinidad_basica)), 1)
     afinidad += contexto.get('afinidad', 0)
     deportivo = round(min(8.5,base + cartel + fase + contexto['ajuste'] + calidad['ajuste'] + rivalidad['ajuste']),2)
@@ -181,6 +198,9 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
                         'afinidad':afinidad,'acceso':acceso,'horario':horario,'contexto':round(nota-nota_basica,1),
                         'calidad_cruce':calidad['ajuste'], 'rivalidad':rivalidad['ajuste'], 'jerarquia_atp':jerarquia,
                         'preferencia_deporte':PREFERENCIA_TENIS if sport == 'Tenis' else 0},
+            'favorito_declarado':favorito,
+            'sesion_motor':sesion_motor(evento),
+            'perfiles_futbol':reconocidos_futbol,
             'evaluacion_rivalidad':rivalidad,
             'evaluacion_fase':fase_verificada,
             'evaluacion_contexto':contexto,

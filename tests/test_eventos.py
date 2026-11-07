@@ -52,7 +52,7 @@ class EventosTests(unittest.TestCase):
         inter = next(e for e in new['filtrados'] if e['local']=='Inter Milan')
         self.assertAlmostEqual(inter['score'],6.6)
         estudiantes = next(e for e in new['filtrados'] if e['visitante']=='Movistar Estudiantes')
-        self.assertEqual(estudiantes['score'],4.2)
+        self.assertEqual(estudiantes['score'],4.9)
 
     def test_estructura_invalida_y_fecha_incorrecta(self):
         for html in ('<html>Acceso denegado</html>', '<table class="tablaPrincipal"></table>',

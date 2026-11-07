@@ -77,6 +77,13 @@ def extraer_eventos(html, fecha):
         descripcion_td = row.find('td', class_='eventoUnaColumna')
         if descripcion_td:
             events[-1]['descripcion'] = descripcion_td.get_text(' ', strip=True)
+        from .estado_eventos import estado_evento
+        metadato = row.find(attrs={'itemprop':'eventStatus'})
+        if metadato:
+            events[-1]['estado_fuente'] = metadato.get('content') or metadato.get_text(' ', strip=True)
+        estado = estado_evento(events[-1])
+        if estado != 'programado':
+            events[-1]['estado'] = estado
     if not events or not any(e['deporte'] for e in events):
         raise ErrorEventos('La tabla no contiene eventos reconocibles; no se interpretará como un día sin recomendaciones.')
     logger.info('Extraídos %s eventos para %s de la primera tabla.', len(events), fecha)
@@ -132,6 +139,10 @@ def generar_resultado_eventos(ahora=None):
             marcar(e, 'sin_datos', 'fallo_contexto')
         avisos.append('Contexto deportivo no disponible; se conservan las valoraciones básicas.')
     result = recomendar_eventos(events, ahora=ahora, fecha=fecha)
+    no_programables = [e for e in result.get('excluidos',[]) if e.get('estado') != 'programado']
+    if no_programables:
+        avisos.append('Sin programación ni calendario: ' + '; '.join(
+            f"{e['local']} — {e['visitante']} ({e['estado']})" for e in no_programables))
     result['diagnostico'] = preparar_diagnostico(result, ahora)
     cobertura = result['diagnostico']['cobertura']
     if hubo_contexto:

@@ -1,0 +1,156 @@
+[
+  {
+    "nombre": "Athletic Club",
+    "alias": [
+      "athletic",
+      "athletic club",
+      "athletic bilbao"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.athletic-club.eus/club/historia/",
+    "verificado": "2026-11-07",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Valencia",
+    "alias": [
+      "valencia",
+      "valencia cf"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.valenciacf.com/es/nuestra-historia",
+    "verificado": "2026-11-07",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Newcastle",
+    "alias": [
+      "newcastle",
+      "newcastle united"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.newcastleunited.com/en/mens-team-history",
+    "verificado": "2026-11-07",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Stuttgart",
+    "alias": [
+      "stuttgart",
+      "vfb stuttgart"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.vfb.de/en/1893/club/history/",
+    "verificado": "2026-11-07",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Bologna",
+    "alias": [
+      "bologna",
+      "bologna fc",
+      "bologna fc 1909"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.bolognafc.it/en/history-2/",
+    "verificado": "2026-11-07",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Real Zaragoza",
+    "alias": [
+      "real zaragoza",
+      "zaragoza"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.sdhuesca.es/noticias/acompananos-en-el-proximo-derbi",
+    "verificado": "2026-11-07",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Boca Juniors",
+    "alias": [
+      "boca",
+      "boca juniors"
+    ],
+    "puntos": 0.8,
+    "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
+    "verificado": "2026-11-07",
+    "ambito": "argentina"
+  },
+  {
+    "nombre": "River Plate",
+    "alias": [
+      "river plate"
+    ],
+    "puntos": 0.8,
+    "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
+    "verificado": "2026-11-07",
+    "ambito": "argentina"
+  },
+  {
+    "nombre": "Independiente",
+    "alias": [
+      "independiente",
+      "ca independiente"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
+    "verificado": "2026-11-07",
+    "ambito": "argentina"
+  },
+  {
+    "nombre": "Racing Club",
+    "alias": [
+      "racing club",
+      "racing avellaneda"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
+    "verificado": "2026-11-07",
+    "ambito": "argentina"
+  },
+  {
+    "nombre": "San Lorenzo",
+    "alias": [
+      "san lorenzo"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
+    "verificado": "2026-11-07",
+    "ambito": "argentina"
+  },
+  {
+    "nombre": "Estudiantes de La Plata",
+    "alias": [
+      "estudiantes lp",
+      "estudiantes la plata",
+      "estudiantes de la plata"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
+    "verificado": "2026-11-07",
+    "ambito": "argentina"
+  },
+  {
+    "nombre": "Argentinos Juniors",
+    "alias": [
+      "argentinos",
+      "argentinos juniors"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
+    "verificado": "2026-11-07",
+    "ambito": "argentina"
+  },
+  {
+    "nombre": "Rosario Central",
+    "alias": [
+      "rosario central"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
+    "verificado": "2026-11-07",
+    "ambito": "argentina"
+  }
+]

@@ -25,7 +25,8 @@ def marcar(evento, estado, motivo, **detalle):
 def version_modelo():
     h = hashlib.sha256()
     for nombre in ('puntuacion.py', 'calidad_cruce.py', 'rivalidades.py', 'calendario.py', 'planning.py', 'contexto.py', 'perfiles.py', 'preferencias_eventos.py',
-                   'contexto_fuentes.py', 'fuente_eventos.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py'):
+                   'contexto_fuentes.py', 'fuente_eventos.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py',
+                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py'):
         h.update(nombre.encode())
         h.update((ROOT/'resumen'/nombre).read_bytes().replace(b'\r\n', b'\n'))
     for p in sorted((ROOT/'data').glob('*.json')):
@@ -41,7 +42,7 @@ def serializar(valor):
 
 
 def preparar_diagnostico(eventos, ahora):
-    campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales',
+    campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente',
               'contexto','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad','evaluacion_fase',
               'motivos','inicio','fin_estimado','inicio_vision','fin_vision','vision_parcial')
     registros = [{k:e[k] for k in campos if k in e} for e in eventos.get('filtrados', [])]
@@ -64,7 +65,7 @@ def preparar_diagnostico(eventos, ahora):
         d['validados'] += e.get('evaluacion_contexto',{}).get('estado') == 'validado'
         motivo = e.get('diagnostico_contexto',{}).get('motivo','sin_diagnostico')
         d['motivos'][motivo] = d['motivos'].get(motivo,0)+1
-    snapshot = dict(version=VERSION_DIAGNOSTICO, modelo=version_modelo(), corte=ahora.isoformat(),
+    snapshot = dict(version=VERSION_DIAGNOSTICO, modelo=version_modelo(), corte=ahora.isoformat(), excluidos=eventos.get('excluidos',[]),
                     cobertura=resumen, por_deporte=por_deporte, eventos=registros,
                     plan={k:f"{e['local']} — {e['visitante']}" for k,e in eventos.get('plan',{}).items()})
     return limpiar(json.loads(json.dumps(snapshot, default=serializar, ensure_ascii=False)))
@@ -83,11 +84,14 @@ def reproducir(snapshot):
     if snapshot['modelo'] != version_modelo():
         raise ValueError('La instantánea corresponde a otra versión del modelo.')
     entradas = []
-    campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales',
+    campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente',
               'contexto','diagnostico_contexto')
     for e in snapshot['eventos']:
         entradas.append({k:e[k] for k in campos if k in e})
-    return recomendar_eventos(entradas, ahora=datetime.fromisoformat(snapshot['corte']))
+    resultado = recomendar_eventos(entradas, ahora=datetime.fromisoformat(snapshot['corte']))
+    if snapshot.get('excluidos'):
+        resultado['excluidos'] = snapshot['excluidos']
+    return resultado
 
 
 def html_diagnostico(snapshot):
@@ -106,5 +110,9 @@ def html_diagnostico(snapshot):
         detalle=' · '.join(f'{k}: {v}' for k,v in d.get('participantes',{}).items())
         nombre = f"{e['local']} — {e['visitante']}" if e.get('local') else e.get('descripcion') or e['competicion']
         body+=f'<tr style="background:{color}"><td style="padding:12px;border-bottom:1px solid white">{t(e["hora"])} · {t(nombre)}</td><td style="padding:12px">{t(d.get("estado","sin datos"))}<br><strong>{t(etiquetas.get(d.get("motivo"), d.get("motivo","Sin diagnóstico")))}</strong><br>{t(detalle)}</td><td style="padding:12px">{e["score"]:.1f}</td></tr>'
-    body+='</table><p>Instantánea de la agenda y datos usados. No incluye correo personal, claves ni marcadores NBA.</p>'
+    body+='</table><h2>Eventos que no entraron en tu agenda</h2>'
+    for e in snapshot.get('excluidos',[]):
+        nombre = f"{e.get('local','')} — {e.get('visitante','')}" if e.get('local') else e.get('descripcion') or e.get('competicion','')
+        body+=f'<p>{t(e.get("hora",""))} · {t(nombre)} · <strong>{t(e.get("motivo",""))}</strong></p>'
+    body+='<p>Instantánea de la agenda y datos usados. No incluye correo personal, claves ni marcadores NBA.</p>'
     return '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cobertura deportiva</title></head><body style="margin:0;background:#f2f5f8;font:14px/1.6 Arial;color:#172b43"><main style="max-width:1000px;margin:auto;padding:20px;overflow-wrap:anywhere">'+body+'</main></body></html>'

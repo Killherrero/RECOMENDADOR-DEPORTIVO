@@ -3,8 +3,9 @@ from datetime import datetime, timedelta, timezone
 from urllib.parse import urlencode
 
 from .config import MADRID_TZ
-from .horarios import DURACIONES
+from .horarios import duracion_evento
 from .canales import canal_texto
+from .estado_eventos import programable
 
 
 def fecha_con_zona(valor):
@@ -17,6 +18,8 @@ def fecha_con_zona(valor):
 
 def enlace_calendario(evento, inicio=None, fin=None, tramo=False):
     """Vacío sin fecha cierta. El enlace abre un formulario; nunca guarda eventos."""
+    if not programable(evento):
+        return ''
     try:
         comienzo = fecha_con_zona(inicio if inicio is not None else
                                  evento.get('inicio') or f"{evento['fecha']}T{evento['hora']}")
@@ -25,8 +28,7 @@ def enlace_calendario(evento, inicio=None, fin=None, tramo=False):
         elif evento.get('fin_estimado'):
             final = fecha_con_zona(evento['fin_estimado'])
         else:
-            duracion = (150 if evento.get('deporte') == 'Baloncesto' and 'nba' in evento.get('competicion','').casefold()
-                        else DURACIONES.get(evento.get('deporte'),120))
+            duracion = duracion_evento(evento)
             final = datetime.fromtimestamp(comienzo.timestamp() + duracion*60, MADRID_TZ)
         if final.timestamp() <= comienzo.timestamp():
             return ''

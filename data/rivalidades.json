@@ -642,5 +642,61 @@
     "verificado": "2026-10-30",
     "region": "Selecciones",
     "ambito": "selecciones"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "osasuna",
+      "athletic"
+    ],
+    "nombre": "Rivalidad Osasuna–Athletic",
+    "bonus": 0.5,
+    "tipo": "Rivalidad histórica",
+    "fuente": "https://www.athletic-club.eus/noticias/2020/10/24/la-rivalidad-entre-athletic-y-osasuna-empezo-en-1923/",
+    "verificado": "2026-11-07",
+    "region": "España",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "parma",
+      "bologna"
+    ],
+    "nombre": "Derbi emiliano",
+    "bonus": 0.35,
+    "tipo": "Derbi local",
+    "fuente": "https://www.legaseriea.it/serie-a/news/parma-bologna-va-in-scena-il-derby-emiliano",
+    "verificado": "2026-11-07",
+    "region": "Italia",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "gimnasia mendoza",
+      "independiente rivadavia"
+    ],
+    "nombre": "Clásico de Mendoza",
+    "bonus": 0.6,
+    "tipo": "Derbi local",
+    "fuente": "https://www.youtube.com/watch?v=rs0dVkH_GhU",
+    "verificado": "2026-11-07",
+    "region": "Argentina",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "real zaragoza",
+      "huesca"
+    ],
+    "nombre": "Derbi aragonés",
+    "bonus": 0.45,
+    "tipo": "Derbi local",
+    "fuente": "https://www.sdhuesca.es/noticias/acompananos-en-el-proximo-derbi",
+    "verificado": "2026-11-07",
+    "region": "España",
+    "ambito": "clubes"
   }
 ]
