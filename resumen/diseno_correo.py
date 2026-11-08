@@ -58,6 +58,14 @@ def cabecera_tarjeta(contenido, boton):
 def nota_texto(evento):
     return f"{evento['score']:.1f}/10" if evento.get('escala') else f"{evento['score']:.1f} pts"
 
+def nota_html(evento, destacado=False):
+    fondo, tinta = ('#dfae50', '#172b43') if destacado else ('#172f49', '#ffffff')
+    return (f'<span class="nota-evento" style="display:inline-block;vertical-align:middle;'
+            f'background:{fondo};color:{tinta};border:1px solid {fondo};border-radius:7px;'
+            'padding:5px 9px;margin:5px 6px 2px 0;font-size:16px;font-weight:bold;line-height:1.3;'
+            f'white-space:nowrap;">{texto(nota_texto(evento))}</span>')
+
+
 def desglose_html(evento):
     d = evento.get('desglose')
     if not d:return ''
@@ -158,7 +166,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
     icono = ICONOS.get(evento['deporte'], '📺')
     titulo = (evento.get('descripcion') or evento['competicion']) if not evento.get('local') else f"{evento['local']} — {evento['visitante']}"
     fecha = evento['inicio'].strftime('%d/%m') if 'inicio' in evento else evento.get('fecha', '')[5:].replace('-', '/')
-    badge = etiqueta(nota_texto(evento), '#dfae50' if destacado else '#e6f3ec', '#172b43' if destacado else '#1b6948')
+    badge = nota_html(evento, destacado)
     if evento.get('nivel'):badge += etiqueta(evento['nivel'])
     estado = []
     if evento.get('en_curso'):
@@ -173,7 +181,7 @@ def tarjeta_evento(evento, destacado=False, franja=''):
             f'<tr><td style="padding:20px;">'
             + (f'<p style="margin:0 0 14px;color:{secundaria};font-size:11px;font-weight:bold;letter-spacing:1.8px;">{texto(label)}</p>' if label else '')
             + '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="table-layout:fixed;"><tr>'
-            f'<td width="74" valign="top" style="padding:0 12px;text-align:center;color:{tinta};">'
+            f'<td width="74" valign="middle" style="padding:0 12px;text-align:center;color:{tinta};">'
             f'<div style="font-size:27px;font-weight:bold;line-height:1.2;white-space:nowrap;">{texto(evento["hora"])}</div>'
             f'<div style="margin-top:5px;font-size:12px;color:{secundaria};">{texto(fecha)}</div></td>'
             f'<td valign="top" style="color:{tinta};overflow-wrap:anywhere;">'
@@ -202,12 +210,12 @@ def listado_completo(eventos):
         marco_hora = f'border-left:3px solid {linea};border-top:3px solid {linea};border-bottom:3px solid {linea};' if favorito else ''
         marco_datos = f'border-right:3px solid {linea};border-top:3px solid {linea};border-bottom:3px solid {linea};' if favorito else ''
         filas.append(f'<tr class="evento-filtrado" style="background:{fondo};color:{tinta};{marco}">'
-                     f'<td width="68" valign="top" style="padding:13px 12px;text-align:center;border-bottom:1px solid {linea};white-space:nowrap;{marco_hora}"><strong>{texto(e["hora"])}</strong><br><span style="font-size:11px;color:{secundaria};">{texto(fecha)}</span></td>'
+                     f'<td width="68" valign="middle" style="padding:13px 12px;text-align:center;border-bottom:1px solid {linea};white-space:nowrap;{marco_hora}"><strong>{texto(e["hora"])}</strong><br><span style="font-size:11px;color:{secundaria};">{texto(fecha)}</span></td>'
                      f'<td valign="top" style="padding:13px 8px;border-left:4px solid {favorito["borde"] if favorito else acento};border-bottom:1px solid {linea};overflow-wrap:anywhere;{marco_datos}">'
                      + cabecera_tarjeta(f'<strong style="font-size:14px;">{texto(nombre)}</strong>', boton_calendario(e)) +
                      f'<span style="font-size:12px;color:{secundaria};">{texto(e["deporte"])} · {texto(e["competicion"])}</span><br>'
                      f'<span style="font-size:12px;line-height:1.6;">{canales_html(e)}</span><br>'
-                     f'<span style="font-size:11px;color:{secundaria if favorito else "#1b6948"};">{texto(nota_texto(e))} · {texto(e.get("nivel", ""))}</span> {categoria_html(e)}'
+                     f'{nota_html(e)}<span style="font-size:12px;font-weight:bold;color:{secundaria};">{texto(e.get("nivel", ""))}</span> {categoria_html(e)}'
                      + (f'<br><span style="font-size:11px;color:{secundaria if favorito else "#8a5217"};">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
                      + (f'<br><span style="font-size:11px;color:{secundaria if favorito else "#8a5217"};">En curso</span>' if e.get('en_curso') else '')
                      + '</td></tr>')
@@ -311,7 +319,7 @@ def crear_html(asunto, secciones, resultado, todos):
                 secundaria_plan = favorito['secundaria'] if favorito else '#375a5d'
                 borde_plan = '3px solid ' + favorito['borde'] if favorito else '0'
                 bloques.append('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;margin-bottom:12px;">'
-                               f'<tr><td width="68" valign="top" style="padding:16px 12px;text-align:center;color:#153e43;font-size:14px;"><strong>{texto(b["desde"])}</strong>'
+                               f'<tr><td width="68" valign="middle" style="padding:16px 12px;text-align:center;color:#153e43;font-size:14px;"><strong>{texto(b["desde"])}</strong>'
                                f'<br><span style="font-size:11px;">hasta<br>{texto(b["hasta"])}</span></td>'
                                f'<td valign="top" style="padding:16px;background:{color};color:{tinta_plan};border:{borde_plan};border-left:4px solid {favorito["borde"] if favorito else acento};border-radius:0 10px 10px 0;overflow-wrap:anywhere;">'
                                + cabecera_tarjeta(
