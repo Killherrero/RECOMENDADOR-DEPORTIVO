@@ -42,9 +42,7 @@ def boton_calendario(evento=None, enlace=None, tramo=False):
     etiqueta = '📅 Añadir tramo recomendado' if tramo else '📅 Añadir partido completo'
     return (f'<div style="margin-top:14px;"><a href="{texto(url)}" target="_blank" rel="noopener noreferrer" '
             'style="display:inline-block;background:#ffffff;color:#174c85;border:1px solid #83a9d0;'
-            f'border-radius:8px;padding:10px 13px;text-decoration:none;font-size:13px;font-weight:bold;">{etiqueta}</a>'
-            '<div style="font-size:11px;line-height:1.5;margin-top:6px;">'
-            'En Google Calendar, elige <strong>Partidazos</strong> y pulsa Guardar.</div></div>')
+            f'border-radius:8px;padding:10px 13px;text-decoration:none;font-size:13px;font-weight:bold;">{etiqueta}</a></div>')
 
 
 def nota_texto(evento):
@@ -172,11 +170,12 @@ def tarjeta_evento(evento, destacado=False, franja=''):
             f'<div style="font-size:12px;color:{secundaria};margin-bottom:7px;">{icono} {texto(evento["deporte"])} · {texto(identidad)}</div>'
             f'<div style="font-size:20px;font-weight:bold;line-height:1.35;">{texto(titulo)}</div>'
             f'<div style="font-size:13px;line-height:1.5;color:{secundaria};margin-top:7px;">{texto(evento["competicion"])}</div>'
-            f'<div style="margin-top:10px;">{categoria_html(evento)} {badge}</div>{desglose_html(evento)}{explicacion_html(evento)}</td></tr></table>'
+            f'<div style="margin-top:10px;">{categoria_html(evento)} {badge}</div></td></tr></table>'
             f'<p style="color:{tinta};font-size:13px;line-height:1.6;margin:16px 0 0;padding-top:12px;border-top:1px solid {"#3c536b" if destacado else "#edf1f5"};">'
             f'<strong>TV</strong><br>{canales_html(evento)}</p>'
             + (f'<p style="font-size:12px;line-height:1.6;color:{secundaria};margin:8px 0 0;">{texto(" · ".join([s for s in [fin, *estado] if s]))}</p>' if fin or estado else '')
-            + boton_calendario(evento) + '</td></tr></table>')
+            + boton_calendario(evento) + '</td></tr></table>'
+            + '<div role="separator" style="border-top:1px solid #8995a3;margin:14px 0;font-size:0;line-height:0;"></div>')
 
 def listado_completo(eventos):
     filas = []
@@ -187,7 +186,7 @@ def listado_completo(eventos):
         favorito = favorito_visual(e)
         tinta = favorito['tinta'] if favorito else '#172b43'
         secundaria = favorito['secundaria'] if favorito else '#52647a'
-        linea = favorito['borde'] if favorito else '#e4eaf1'
+        linea = favorito['borde'] if favorito else '#8995a3'
         marco = f'border:3px solid {linea};' if favorito else ''
         marco_hora = f'border-left:3px solid {linea};border-top:3px solid {linea};border-bottom:3px solid {linea};' if favorito else ''
         marco_datos = f'border-right:3px solid {linea};border-top:3px solid {linea};border-bottom:3px solid {linea};' if favorito else ''
@@ -200,7 +199,7 @@ def listado_completo(eventos):
                      f'<span style="font-size:11px;color:{secundaria if favorito else "#1b6948"};">{texto(nota_texto(e))} · {texto(e.get("nivel", ""))}</span> {categoria_html(e)}'
                      + (f'<br><span style="font-size:11px;color:{secundaria if favorito else "#8a5217"};">Visionado parcial hasta {e["fin_vision"]:%H:%M}</span>' if e.get('vision_parcial') else '')
                      + (f'<br><span style="font-size:11px;color:{secundaria if favorito else "#8a5217"};">En curso</span>' if e.get('en_curso') else '')
-                     + desglose_html(e) + explicacion_html(e) + boton_calendario(e) + '</td></tr>')
+                     + boton_calendario(e) + '</td></tr>')
     return ('<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="color:#172b43;">'
             + ''.join(filas) + '</table>' if filas else '<p>No hay eventos que superen los filtros y la disponibilidad.</p>')
 

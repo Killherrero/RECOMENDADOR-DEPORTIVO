@@ -13,31 +13,10 @@ def linea_evento(event):
     texto = f"{hora} · {title} · {canales} · {nota_texto(event)}"
     if event.get('nivel'):
         texto += f" · {event['nivel']}"
-    if event.get('desglose'):
-        d = event['desglose']
-        texto += f" · Interés deportivo {d['deportivo']:.2f} · Afinidad {d['afinidad']:+.2f} (ajustes deportivos ya incluidos; nota redondeada)"
-        if d.get('preferencia_deporte'):
-            texto += ' · Preferencia tenis −0,4 (incluida en afinidad); plan desde 7,5/10'
-    contexto = event.get('evaluacion_contexto', {})
-    if contexto.get('detalle_copa'):
-        texto += f" · Copa: {contexto['detalle_copa']} · Contraste +{contexto['contraste']:.1f} · Racha desfavorable +{contexto['vulnerabilidad']:.1f}"
-    rivalidad = event.get('evaluacion_rivalidad', {})
-    if rivalidad.get('estado') == 'verificada':
-        texto += f" · {rivalidad['nombre']} (+{rivalidad['ajuste']:.2f}) · Verificado {rivalidad['verificado']} · Fuente: {rivalidad['fuente']}"
-    if contexto.get('estado') in ('validado','parcial'):
-        tipo_contexto = 'Datos ATP parciales' if contexto['estado'] == 'parcial' else 'Contexto'
-        texto += f" · {tipo_contexto} {event['desglose'].get('contexto', 0):+.1f} · Consultado {contexto['consultado']} · Fuentes: " + ' '.join(contexto['fuentes'])
-        ronda = event.get('contexto', {}).get('local', {}).get('ronda')
-        if ronda:
-            texto += f" · Datos hasta jornada {ronda}"
-        if contexto.get('publicado'):
-            texto += f" · Ranking publicado: {contexto['publicado'][:10]}"
     if event.get('categoria_reconocida'):
         texto += f" · Categoría: {event['categoria_reconocida']}"
     elif event.get('deporte') == 'Tenis' and 'origen_categoria' in event:
         texto += ' · Categoría por confirmar (sin penalización por datos ausentes)'
-    if event.get('evaluacion_fase'):
-        texto += ' · ' + event['evaluacion_fase']['nombre'] + ' · Fuente: ' + event['evaluacion_fase']['fuente']
     if 'fin_estimado' in event:
         texto += f" · Fin estimado: {event['fin_estimado']:%d/%m %H:%M}"
     if event.get('en_curso'):
@@ -46,13 +25,10 @@ def linea_evento(event):
         texto += f" · Visionado parcial: hasta {event['fin_vision']:%H:%M}"
     if event.get('madrugada'):
         texto += ' · Opción de madrugada'
-    razones = frases_explicacion(event)
-    if razones:
-        texto += '\n  Por qué: ' + ' · '.join(razones)
     from .calendario import enlace_calendario
     enlace = enlace_calendario(event)
     if enlace:
-        texto += '\n  Añadir partido completo a Google Calendar (elige Partidazos antes de guardar): ' + enlace
+        texto += '\n  Añadir partido completo a Google Calendar: ' + enlace
     return texto
 
 def contenido(resultado):

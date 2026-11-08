@@ -67,7 +67,7 @@ class CambiosNoviembreTests(unittest.TestCase):
   self.assertFalse(r['plan'])
   informe=generar_informe(dict(fecha=DIA.isoformat(),eventos=r,camiseta=None,nba=None,errores={}))
   self.assertIn('Tus equipos · para seguir',informe['html'])
-  self.assertIn('Interés deportivo 3.50',informe['html'])
+  self.assertNotIn('Interés deportivo',informe['html'])
  def test_reconocimiento_argentino_no_es_premio_global(self):
   comp='Primera División Argentina Torneo Clausura'
   self.assertEqual(evaluar_evento(e('Club sin perfil','Otro','Fútbol',comp))['score'],3.5)

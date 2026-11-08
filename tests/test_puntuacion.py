@@ -75,7 +75,7 @@ class PuntuacionTests(unittest.TestCase):
         self.assertIn('Lo mejor del día',informe['texto'])
         self.assertNotIn('📺 Imprescindible',informe['texto'])
         self.assertIn('/10',informe['html'])
-        self.assertIn('Interés deportivo',informe['html'])
+        self.assertNotIn('Interés deportivo',informe['html'])
 
     def test_prioridad_ordena_sin_ocultar_nota_y_entrada_inmutable(self):
         e=evento('PSG','Lyon','Ligue 1',canales=['DAZN'])

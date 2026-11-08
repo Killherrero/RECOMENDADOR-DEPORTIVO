@@ -81,14 +81,20 @@ class ContextoTests(unittest.TestCase):
         self.assertNotEqual(a['prioridad'],b['prioridad'])
         self.assertAlmostEqual(a['score'],round(a['desglose']['deportivo']+a['desglose']['afinidad'],1))
 
-    def test_fuente_fecha_y_motivo_en_correo_y_adjunto(self):
+    def test_contexto_se_conserva_internamente_sin_desglose_visible(self):
         e=contextual();e['contexto']['visitante']=equipo('Equipo B',2,'WWWWW',8,7,0)
         r=demostracion('eventos');r['eventos']=recomendar_eventos([e],fecha=datetime(2026,10,27).date())
         informe=generar_informe(r)
+        from resumen.diagnostico import preparar_diagnostico
+        import json
+        interno=json.dumps(preparar_diagnostico(r['eventos'],datetime(2026,10,27)))
+        self.assertIn('example.org/tabla',interno)
+        self.assertIn('2026-10-27',interno)
         for k in ('html','texto','listado_html'):
-            self.assertIn('example.org/tabla',informe[k])
-            self.assertIn('2026-10-27',informe[k])
-            self.assertIn('invicto',informe[k])
+            self.assertNotIn('Interés deportivo',informe[k])
+            self.assertNotIn('Por qué te lo proponemos',informe[k])
+            self.assertNotIn('Nota final redondeada',informe[k])
+            self.assertNotIn('En Google Calendar, elige',informe[k])
 
     @patch('resumen.contexto_fuentes.tabla_futbol',side_effect=ErrorContexto('Fallo'))
     def test_fuente_caida_y_evento_iniciado_conservan_base(self,fuente):

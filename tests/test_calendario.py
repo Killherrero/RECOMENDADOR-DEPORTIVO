@@ -55,4 +55,4 @@ class CalendarioTests(unittest.TestCase):
         self.assertIn('calendar.google.com',tarjeta_evento(e,True))
         self.assertIn('calendar.google.com',listado_completo([e]))
         self.assertIn('calendario_url',r['planning'][0])
-        self.assertIn('Partidazos',tarjeta_evento(e))
+        self.assertNotIn('elige <strong>Partidazos',tarjeta_evento(e))
