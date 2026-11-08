@@ -698,5 +698,33 @@
     "verificado": "2026-11-07",
     "region": "España",
     "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "club brugge",
+      "anderlecht"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Clásico Brujas–Anderlecht",
+    "bonus": 0.6,
+    "fuente": "https://www.proleague.be/fr/informations/stathursday-10-choses-a-savoir-sur-le-topper-entre-le-rsc-anderlecht-et-le-club-brugge",
+    "verificado": "2026-11-08",
+    "region": "Bélgica",
+    "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "fiorentina",
+      "juventus"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Rivalidad Fiorentina–Juventus",
+    "bonus": 0.6,
+    "fuente": "https://www.uefa.com/uefaeuropaleague/news/0213-0ea144722fe5-2aef5a0f2272-1000--juventus-v-fiorentina-five-memorable-meetings/",
+    "verificado": "2026-11-08",
+    "region": "Italia",
+    "ambito": "clubes"
   }
 ]

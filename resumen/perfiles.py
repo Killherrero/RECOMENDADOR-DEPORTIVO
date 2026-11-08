@@ -13,6 +13,11 @@ CODIGOS_EUROLIGA = {'IST':'efes', 'HTA':'hapoel tel aviv', 'ASV':'asvel',
                      'PAR':'partizan', 'VIR':'virtus', 'ZAL':'zalgiris'}
 
 ALIAS_BASKET = {
+    'joventut badalona':'joventut', 'asisa joventut':'joventut', 'club joventut badalona':'joventut',
+    'la laguna tenerife':'tenerife', 'lenovo tenerife':'tenerife', 'iberostar tenerife':'tenerife', 'cb canarias':'tenerife',
+    'unicaja malaga':'unicaja', 'unicaja baloncesto':'unicaja', 'cb malaga':'unicaja',
+    'ucam murcia cb':'ucam murcia', 'ucam murcia club de baloncesto':'ucam murcia',
+    'casademont zaragoza':'zaragoza', 'basket zaragoza':'zaragoza',
     'anadolu efes istanbul':'efes', 'anadolu efes':'efes',
     'hapoel tel aviv bc':'hapoel tel aviv', 'hapoel ibi tel aviv':'hapoel tel aviv',
     'asvel lyon villeurbanne':'asvel', 'ldlc asvel villeurbanne':'asvel',

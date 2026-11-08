@@ -11,6 +11,7 @@ from .config import MADRID_TZ
 from .perfiles import normalizar, identidad_basket, CODIGOS_EUROLIGA
 from .categorias import categoria_tenis
 from .diagnostico import ResultadoContexto, marcar
+from .ligas import liga_futbol
 
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer'
 TABLAS = 'https://site.web.api.espn.com/apis/v2/sports/soccer'
@@ -60,8 +61,8 @@ def liga_evento(e):
     if e.get('deporte') != 'Fútbol':
         return None
     comp = normalizar(e['competicion'])
-    if '2 bundesliga' in comp:
-        return None
+    if 'bundesliga' in comp:
+        return 'ger.1' if liga_futbol(e['competicion']) == 'ger.1' else None
     for tokens, liga in [(['hypermotion'], 'esp.2'),
                          (['laliga', 'la liga', 'ea sports'], 'esp.1'),
                          (['premier league'], 'eng.1'), (['serie a italiana', 'italian serie a'], 'ita.1'),
@@ -467,6 +468,10 @@ def enriquecer_eventos(eventos, ahora):
     for e in eventos:
         e.pop('contexto', None)
         marcar(e, 'sin_datos', 'competicion_no_cubierta')
+        if e.get('deporte') == 'Fútbol' and liga_futbol(e.get('competicion','')) == 'aut.1':
+            marcar(e, 'sin_datos', 'liga_austriaca_sin_cobertura')
+        elif e.get('deporte') == 'Fútbol' and liga_futbol(e.get('competicion','')) in ('bel.1','ned.1','por.1'):
+            marcar(e, 'sin_datos', 'liga_sin_cobertura', liga=liga_futbol(e['competicion']))
         try:
             inicio = datetime.fromisoformat(f"{e.get('fecha', ahora.date().isoformat())}T{e['hora']}").replace(tzinfo=MADRID_TZ)
         except (ValueError, KeyError, TypeError):

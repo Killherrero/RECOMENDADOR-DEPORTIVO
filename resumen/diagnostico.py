@@ -26,7 +26,7 @@ def version_modelo():
     h = hashlib.sha256()
     for nombre in ('puntuacion.py', 'calidad_cruce.py', 'rivalidades.py', 'calendario.py', 'planning.py', 'contexto.py', 'perfiles.py', 'preferencias_eventos.py',
                    'contexto_fuentes.py', 'fuente_eventos.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py',
-                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py'):
+                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py','ligas.py','ncaa.py'):
         h.update(nombre.encode())
         h.update((ROOT/'resumen'/nombre).read_bytes().replace(b'\r\n', b'\n'))
     for p in sorted((ROOT/'data').glob('*.json')):
@@ -99,6 +99,8 @@ def html_diagnostico(snapshot):
     def t(x): return escape(str(x), quote=True)
     r=snapshot['cobertura']
     etiquetas={'con_ajuste':'Datos validados, con ajuste','validado_sin_ajuste':'Datos validados, sin bonus','participante_sin_datos':'Solo un participante tiene datos','identidad_no_resuelta':'Nombre no reconocido','identidad_ambigua':'Nombre ambiguo','fuente_no_disponible':'Fuente no disponible','otra_temporada':'Temporada incorrecta','historico_y_tabla_no_coinciden':'Histórico y tabla no coinciden','competicion_no_cubierta':'Competición sin fuente de contexto','evento_iniciado':'El evento ya había empezado','tiempo_agotado':'Se agotó el tiempo de consulta','horario_no_coincide':'Los horarios no coinciden','partido_no_identificado':'Partido no identificado en la fuente','ranking_fuera_de_fecha':'Ranking desactualizado o futuro'}
+    etiquetas.update({'liga_austriaca_sin_cobertura':'Liga austriaca identificada; sin fuente de contexto local',
+                      'liga_sin_cobertura':'Liga identificada; sin clasificación/forma validada'})
     body=f'<h1>Cobertura del contexto</h1><p>Corte: {t(snapshot["corte"])} · Modelo: {t(snapshot["modelo"])}</p>'
     body+='<div style="display:flex;flex-wrap:wrap;gap:12px">'
     for k in ('relevantes','validados','parciales','con_ajuste'):

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "tenerife",
+    "nombre": "La Laguna Tenerife",
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://acb.com/docs/descarga/notasprensa/20232024/2324_CR_DOSSIER_ESTADISTICO.pdf"
+  },
+  {
+    "id": "unicaja",
+    "nombre": "Unicaja",
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://acb.com/docs/descarga/notasprensa/20232024/2324_CR_DOSSIER_ESTADISTICO.pdf"
+  },
+  {
+    "id": "ucam murcia",
+    "nombre": "UCAM Murcia",
+    "nivel": "reconocido",
+    "puntos": 0.35,
+    "fuente": "https://www.ucamdeportes.com/ucamcb/el-club"
+  }
+]

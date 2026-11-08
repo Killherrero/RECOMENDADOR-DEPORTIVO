@@ -8,7 +8,8 @@ def sesion_motor(evento):
         return None
     texto = normalizar(evento.get('competicion', '') + ' ' + evento.get('descripcion', ''))
     categoria = ('F1' if re.search(r'\b(?:f1|formula\s*1)\b', texto) else
-                 'MotoGP' if re.search(r'\bmotogp\b', texto) else None)
+                 'MotoGP' if re.search(r'\bmotogp\b', texto) else
+                 'NASCAR Cup' if re.search(r'\bnascar cup series\b', texto) and 'enascar' not in texto else None)
     if not categoria:
         return None
     if re.search(r'\b(?:libres?|entrenamientos?|practice|warm up|fp[123])\b', texto):
@@ -24,9 +25,14 @@ def sesion_motor(evento):
     notas = {'entrenamientos':4.7, 'clasificacion':5.4, 'sprint':6.0, 'carrera':6.4}
     if categoria == 'MotoGP':
         notas = {**notas, 'entrenamientos':4.0, 'clasificacion':5.0}
+    if categoria == 'NASCAR Cup':
+        notas = {'entrenamientos':3.5, 'clasificacion':4.2, 'sprint':5.2, 'carrera':5.2}
     duraciones = {'entrenamientos':75, 'clasificacion':75 if categoria == 'F1' else 60,
                   'sprint':45, 'carrera':150 if categoria == 'F1' else 60}
-    return {'categoria':categoria, 'tipo':tipo, 'base':notas[tipo], 'duracion':duraciones[tipo]}
+    if categoria == 'NASCAR Cup':
+        duraciones = {'entrenamientos':75,'clasificacion':75,'sprint':180,'carrera':180}
+    return {'categoria':categoria, 'tipo':tipo, 'base':notas[tipo], 'duracion':duraciones[tipo],
+            **({'importancia_titulo':'Sin verificar; Championship no añade bonus'} if categoria == 'NASCAR Cup' else {})}
 
 
 def final_padel_espana(evento):

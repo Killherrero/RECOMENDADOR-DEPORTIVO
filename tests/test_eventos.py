@@ -50,7 +50,7 @@ class EventosTests(unittest.TestCase):
         self.assertEqual(final['categoria_reconocida'],'ATP 250')
         self.assertEqual(new['plan']['imprescindible']['local'],'FC Barcelona')
         inter = next(e for e in new['filtrados'] if e['local']=='Inter Milan')
-        self.assertAlmostEqual(inter['score'],6.6)
+        self.assertAlmostEqual(inter['score'],6.9) # Fiorentina añade reconocimiento intermedio.
         estudiantes = next(e for e in new['filtrados'] if e['visitante']=='Movistar Estudiantes')
         self.assertEqual(estudiantes['score'],4.9)
 

@@ -9,7 +9,8 @@ from .calidad_cruce import valorar_cruce
 from .rivalidades import valorar_rivalidad
 from .favoritos import favorito_declarado
 from .sesiones import sesion_motor, final_padel_espana
-from .reconocimiento import perfiles_futbol
+from .reconocimiento import perfiles_futbol, perfiles_acb
+from .ligas import liga_futbol
 
 UMBRAL_PLAN = 6.5
 UMBRAL_PLAN_TENIS = 7.5
@@ -36,6 +37,8 @@ def contar_referentes(local, visitante, referentes):
     return sum(any(coincide(t, nombre) for t in referentes) for nombre in (local, visitante))
 
 def base_futbol(comp):
+    if liga_futbol(comp) == 'aut.1':
+        return 4.3, 'Primera división austriaca; contexto local sin cobertura'
     # Especificidad antes de términos amplios: segunda división no equivale a primera.
     for tokens, valor, motivo in [
         (['hypermotion','2. bundesliga'],4.3,'Segunda división de interés'),
@@ -81,10 +84,12 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         base, motivo = base_futbol(competicion)
         motivos.append(motivo)
         n = contar_referentes(local, visitante, REFERENTES_FUTBOL)
+        nuevos_referentes = [p for p in reconocidos_futbol if p.get('nivel') == 'referente']
+        n = min(2, n + len(nuevos_referentes))
         cartel = 2.0 if n == 2 else 0.8 if n == 1 else 0
-        extra_reconocimiento = sum(p['puntos'] for p in reconocidos_futbol)
+        extra_reconocimiento = sum(p['puntos'] for p in reconocidos_futbol if p.get('nivel') != 'referente')
         cartel = min(2.0, cartel + extra_reconocimiento)
-        if extra_reconocimiento:
+        if reconocidos_futbol:
             motivos.append('Reconocimiento editorial moderado: ' + ', '.join(p['nombre'] for p in reconocidos_futbol))
         if n == 2:motivos.append('Duelo entre equipos de referencia')
         elif n == 1:motivos.append('Participa un equipo de referencia')
@@ -113,6 +118,12 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
                 afinidad = 1.3
                 motivos.append('Juega tu Estudiantes; preferencia personal separada del nivel de la liga')
         cartel = 1.5 if n == 2 else 0.8 if n == 1 else 0
+        if perfiles_acb(evento):
+            perfiles_acb_actuales = perfiles_acb(evento)
+            n_acb = n + sum(p['nivel'] == 'referente' for p in perfiles_acb_actuales)
+            cartel = 1.5 if n_acb >= 2 else .8 if n_acb == 1 else 0
+            cartel = min(1.5, cartel + sum(p['puntos'] for p in perfiles_acb_actuales if p['nivel'] != 'referente'))
+            motivos.append('Reconocimiento ACB: ' + ', '.join(p['nombre'] for p in perfiles_acb_actuales))
         if any(x in competicion for x in ('euroliga', 'euroleague')):
             reconocidos = sum(e in RECONOCIDOS_EUROLIGA for e in equipos)
             cartel = min(1.5, cartel + .35 * reconocidos)
@@ -201,6 +212,7 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
             'favorito_declarado':favorito,
             'sesion_motor':sesion_motor(evento),
             'perfiles_futbol':reconocidos_futbol,
+            'perfiles_acb':perfiles_acb(evento),
             'evaluacion_rivalidad':rivalidad,
             'evaluacion_fase':fase_verificada,
             'evaluacion_contexto':contexto,

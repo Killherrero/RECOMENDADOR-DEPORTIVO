@@ -61,11 +61,19 @@ def desglose_html(evento):
     if evento.get('sesion_motor'):
         s = evento['sesion_motor']
         html += etiqueta(s['categoria'] + ' · ' + s['tipo'] + f' · {s["duracion"]} min estimados', '#f3e5d1', '#694716')
+        if s.get('importancia_titulo'):
+            html += '<div style="font-size:11px;">Trascendencia para el título sin validar.</div>'
+    if evento.get('perfiles_acb'):
+        html += '<div style="font-size:11px;line-height:1.6;">Reconocimiento ACB incluido: '
+        html += ' · '.join(f'<a href="{texto(p["fuente"])}" style="color:inherit;">{texto(p["nombre"])}</a>' for p in evento['perfiles_acb'])
+        html += '. No implica forma actual.</div>'
     if evento.get('perfiles_futbol'):
         html += '<div style="font-size:11px;line-height:1.6;">Reconocimiento incluido en el interés deportivo: '
         html += ' · '.join(f'<a href="{texto(p["fuente"])}" style="color:inherit;">{texto(p["nombre"])}</a>' for p in evento['perfiles_futbol'])
         html += '. No representa clasificación ni forma actual.</div>'
     c = evento.get('evaluacion_contexto', {})
+    if evento.get('diagnostico_contexto',{}).get('motivo') in ('liga_austriaca_sin_cobertura','liga_sin_cobertura'):
+        html += etiqueta('Liga sin clasificación/forma validada · nota de catálogo', '#edf1f5', '#536276')
     if c.get('fase_nba'):
         html += etiqueta('NBA Cup · ' + c['fase_nba'] if evento.get('contexto', {}).get('copa') else 'NBA · liga regular', '#ffe4c7', '#82400d')
     if c.get('moderacion_forma'):

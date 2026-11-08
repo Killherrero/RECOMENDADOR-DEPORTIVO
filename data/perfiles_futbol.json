@@ -152,5 +152,195 @@
     "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
     "verificado": "2026-11-07",
     "ambito": "argentina"
+  },
+  {
+    "nombre": "Club Brugge",
+    "alias": [
+      "club brugge",
+      "club bruges",
+      "club brugge kv"
+    ],
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://www.proleague.be/jpl-clubs",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Anderlecht",
+    "alias": [
+      "anderlecht",
+      "rsc anderlecht"
+    ],
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://www.proleague.be/jpl-clubs",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Union Saint-Gilloise",
+    "alias": [
+      "saint gilloise",
+      "union saint gilloise",
+      "royale union saint gilloise",
+      "union sg"
+    ],
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://www.proleague.be/jpl-clubs",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Genk",
+    "alias": [
+      "genk",
+      "krc genk"
+    ],
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://www.proleague.be/jpl-clubs",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Feyenoord",
+    "alias": [
+      "feyenoord",
+      "feyenoord rotterdam"
+    ],
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://www.knvb.nl/competities/eredivisie/programma",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "PSV",
+    "alias": [
+      "psv",
+      "psv eindhoven"
+    ],
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://www.knvb.nl/competities/eredivisie/programma",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "AZ",
+    "alias": [
+      "az",
+      "az alkmaar"
+    ],
+    "nivel": "reconocido",
+    "puntos": 0.35,
+    "fuente": "https://www.knvb.nl/competities/eredivisie/programma",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Twente",
+    "alias": [
+      "twente",
+      "fc twente"
+    ],
+    "nivel": "reconocido",
+    "puntos": 0.35,
+    "fuente": "https://www.knvb.nl/competities/eredivisie/programma",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Sturm Graz",
+    "alias": [
+      "sturm graz",
+      "sk sturm graz",
+      "sk puntigamer sturm graz"
+    ],
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://www.bundesliga.at/de/titel-uebersicht",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Salzburg",
+    "alias": [
+      "red bull salzburg",
+      "fc red bull salzburg",
+      "salzburg"
+    ],
+    "nivel": "referente",
+    "puntos": 0.8,
+    "fuente": "https://www.bundesliga.at/de/titel-uebersicht",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Fiorentina",
+    "alias": [
+      "fiorentina",
+      "acf fiorentina"
+    ],
+    "nivel": "reconocido",
+    "puntos": 0.35,
+    "fuente": "https://www.uefa.com/uefaeuropaleague/news/0213-0ea144722fe5-2aef5a0f2272-1000--juventus-v-fiorentina-five-memorable-meetings/",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Lens",
+    "alias": [
+      "lens",
+      "rc lens"
+    ],
+    "nivel": "reconocido",
+    "puntos": 0.35,
+    "fuente": "https://www.rclens.fr/fr/losc-lille-rc-lens",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Vitória SC",
+    "alias": [
+      "vitoria sc",
+      "vitoria guimaraes",
+      "vitoria de guimaraes",
+      "vitoria sport clube"
+    ],
+    "nivel": "reconocido",
+    "puntos": 0.35,
+    "fuente": "https://vitoriasc.pt/wp-content/uploads/2025/09/Relatorio-e-Contas-Clube.pdf",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Sporting Gijón",
+    "alias": [
+      "sporting gijon",
+      "sporting de gijon",
+      "real sporting de gijon",
+      "real sporting"
+    ],
+    "nivel": "reconocido",
+    "puntos": 0.35,
+    "fuente": "https://www.realsporting.com/historia-y-centenario",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Real Valladolid",
+    "alias": [
+      "real valladolid",
+      "real valladolid cf",
+      "valladolid"
+    ],
+    "nivel": "reconocido",
+    "puntos": 0.35,
+    "fuente": "https://www.realvalladolid.es/historia",
+    "verificado": "2026-11-08",
+    "ambito": "clubes"
   }
 ]

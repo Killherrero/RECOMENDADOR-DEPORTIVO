@@ -418,7 +418,8 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
                 is_relevant_baloncesto = True
             if "espana" in local or "espana" in visitante:
                 is_relevant_baloncesto = True
-            if any(t in local for t in TOP_NCAA) or any(t in visitante for t in TOP_NCAA):
+            from .ncaa import universidad_relevante
+            if 'ncaa' in comp and (universidad_relevante(local) or universidad_relevante(visitante)):
                 is_relevant_baloncesto = True
     
             if is_relevant_baloncesto:
