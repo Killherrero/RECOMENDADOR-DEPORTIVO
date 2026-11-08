@@ -62,7 +62,7 @@ def nota_html(evento, destacado=False):
     fondo, tinta = ('#dfae50', '#172b43') if destacado else ('#172f49', '#ffffff')
     return (f'<span class="nota-evento" style="display:inline-block;vertical-align:middle;'
             f'background:{fondo};color:{tinta};border:1px solid {fondo};border-radius:7px;'
-            'padding:5px 9px;margin:5px 6px 2px 0;font-size:16px;font-weight:bold;line-height:1.3;'
+            'padding:3px 7px;margin:4px 6px 2px 0;font-size:14px;font-weight:bold;line-height:1.3;'
             f'white-space:nowrap;">{texto(nota_texto(evento))}</span>')
 
 
