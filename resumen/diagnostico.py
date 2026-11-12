@@ -26,7 +26,7 @@ def version_modelo():
     h = hashlib.sha256()
     for nombre in ('puntuacion.py', 'calidad_cruce.py', 'rivalidades.py', 'calendario.py', 'planning.py', 'contexto.py', 'perfiles.py', 'preferencias_eventos.py',
                    'contexto_fuentes.py', 'fuente_eventos.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py',
-                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py','ligas.py','ncaa.py'):
+                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py','ligas.py','ncaa.py','selecciones.py'):
         h.update(nombre.encode())
         h.update((ROOT/'resumen'/nombre).read_bytes().replace(b'\r\n', b'\n'))
     for p in sorted((ROOT/'data').glob('*.json')):
@@ -43,7 +43,7 @@ def serializar(valor):
 
 def preparar_diagnostico(eventos, ahora):
     campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente',
-              'contexto','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad','evaluacion_fase',
+              'contexto','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad','evaluacion_fase','evaluacion_selecciones',
               'motivos','inicio','fin_estimado','inicio_vision','fin_vision','vision_parcial')
     registros = [{k:e[k] for k in campos if k in e} for e in eventos.get('filtrados', [])]
     for e in registros:

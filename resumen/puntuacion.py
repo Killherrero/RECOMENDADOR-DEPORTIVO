@@ -11,6 +11,7 @@ from .favoritos import favorito_declarado
 from .sesiones import sesion_motor, final_padel_espana
 from .reconocimiento import perfiles_futbol, perfiles_acb
 from .ligas import liga_futbol
+from .selecciones import valorar_selecciones
 
 UMBRAL_PLAN = 6.5
 UMBRAL_PLAN_TENIS = 7.5
@@ -75,6 +76,7 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     jerarquia = 0.0
     favorito = favorito_declarado(evento)
     reconocidos_futbol = perfiles_futbol(evento)
+    seleccion = valorar_selecciones(evento)
     # El bonus de fase anterior distingue final, semifinal, cuartos y octavos.
     fase = {2.5:2.4, 2.0:1.6, 1.5:1.0, 1.0:0.6, 0.8:0.3}.get(ronda, 0)
     if contexto.get('fase_nba'):
@@ -93,12 +95,16 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
             motivos.append('Reconocimiento editorial moderado: ' + ', '.join(p['nombre'] for p in reconocidos_futbol))
         if n == 2:motivos.append('Duelo entre equipos de referencia')
         elif n == 1:motivos.append('Participa un equipo de referencia')
-        if favorito and favorito != 'España':
+        if favorito:
             afinidad = 1.3
             motivos.append('Juega uno de tus favoritos')
         else:
             afinidad = max(0, afinidad_previa) * 0.7
         afinidad += 0.2 # Preferencia habitual por fútbol, sin veto a otros deportes.
+        if seleccion:
+            base = seleccion['base']
+            cartel = seleccion['cartel']
+            motivos.extend(seleccion['motivos'])
     elif sport == 'Baloncesto':
         if 'nba' in competicion:
             base = 5.0
@@ -210,6 +216,7 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
                         'calidad_cruce':calidad['ajuste'], 'rivalidad':rivalidad['ajuste'], 'jerarquia_atp':jerarquia,
                         'preferencia_deporte':PREFERENCIA_TENIS if sport == 'Tenis' else 0},
             'favorito_declarado':favorito,
+            'evaluacion_selecciones':seleccion,
             'sesion_motor':sesion_motor(evento),
             'perfiles_futbol':reconocidos_futbol,
             'perfiles_acb':perfiles_acb(evento),

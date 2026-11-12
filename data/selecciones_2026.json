@@ -1,0 +1,250 @@
+{
+  "inicio": "2026-09-24",
+  "fin": "2026-11-17",
+  "fuentes": [
+    "https://editorial.uefa.com/resources/02a4-207fdf4b084e-a8a8727f0805-1000/unl_2627_-_league_phase_fixture_list_per_matchday_28_april_2026.pdf",
+    "https://editorial.uefa.com/resources/02a2-1fe6ccf35a2e-07e2c98e122b-1000/202627_unl_qualifying_draw_presskit_20260211184312.pdf"
+  ],
+  "grupos": {
+    "A1": [
+      "francia",
+      "italia",
+      "belgica",
+      "turquia"
+    ],
+    "A2": [
+      "alemania",
+      "paises bajos",
+      "serbia",
+      "grecia"
+    ],
+    "A3": [
+      "espana",
+      "croacia",
+      "inglaterra",
+      "chequia"
+    ],
+    "A4": [
+      "portugal",
+      "dinamarca",
+      "noruega",
+      "gales"
+    ],
+    "B1": [
+      "escocia",
+      "suiza",
+      "eslovenia",
+      "macedonia del norte"
+    ],
+    "B2": [
+      "hungria",
+      "ucrania",
+      "georgia",
+      "irlanda del norte"
+    ],
+    "B3": [
+      "israel",
+      "austria",
+      "irlanda",
+      "kosovo"
+    ],
+    "B4": [
+      "polonia",
+      "bosnia herzegovina",
+      "rumania",
+      "suecia"
+    ],
+    "C1": [
+      "albania",
+      "finlandia",
+      "bielorrusia",
+      "san marino"
+    ],
+    "C2": [
+      "montenegro",
+      "armenia",
+      "chipre",
+      "letonia"
+    ],
+    "C3": [
+      "kazajistan",
+      "eslovaquia",
+      "islas feroe",
+      "moldavia"
+    ],
+    "C4": [
+      "islandia",
+      "bulgaria",
+      "estonia",
+      "luxemburgo"
+    ],
+    "D1": [
+      "gibraltar",
+      "malta",
+      "andorra"
+    ],
+    "D2": [
+      "lituania",
+      "azerbaiyan",
+      "liechtenstein"
+    ]
+  },
+  "bombos": {
+    "portugal": 1,
+    "espana": 1,
+    "francia": 1,
+    "alemania": 1,
+    "italia": 2,
+    "paises bajos": 2,
+    "dinamarca": 2,
+    "croacia": 2,
+    "serbia": 3,
+    "belgica": 3,
+    "inglaterra": 3,
+    "noruega": 3,
+    "gales": 4,
+    "chequia": 4,
+    "grecia": 4,
+    "turquia": 4,
+    "escocia": 1,
+    "hungria": 1,
+    "polonia": 1,
+    "israel": 1,
+    "suiza": 2,
+    "bosnia herzegovina": 2,
+    "austria": 2,
+    "ucrania": 2,
+    "eslovenia": 3,
+    "georgia": 3,
+    "irlanda": 3,
+    "rumania": 3,
+    "suecia": 4,
+    "macedonia del norte": 4,
+    "irlanda del norte": 4,
+    "kosovo": 4,
+    "islandia": 1,
+    "albania": 1,
+    "montenegro": 1,
+    "kazajistan": 1,
+    "finlandia": 2,
+    "eslovaquia": 2,
+    "bulgaria": 2,
+    "armenia": 2,
+    "bielorrusia": 3,
+    "islas feroe": 3,
+    "chipre": 3,
+    "estonia": 3,
+    "letonia": 4,
+    "luxemburgo": 4,
+    "moldavia": 4,
+    "san marino": 4
+  },
+  "alias": {
+    "spain": "espana",
+    "seleccion espanola": "espana",
+    "france": "francia",
+    "italy": "italia",
+    "england": "inglaterra",
+    "croatia": "croacia",
+    "republica checa": "chequia",
+    "czech republic": "chequia",
+    "czechia": "chequia",
+    "turkey": "turquia",
+    "turkiye": "turquia",
+    "belgium": "belgica",
+    "netherlands": "paises bajos",
+    "holanda": "paises bajos",
+    "germany": "alemania",
+    "portugal": "portugal",
+    "denmark": "dinamarca",
+    "norway": "noruega",
+    "wales": "gales",
+    "greece": "grecia",
+    "serbia": "serbia",
+    "belarus": "bielorrusia",
+    "cyprus": "chipre",
+    "latvia": "letonia",
+    "finland": "finlandia",
+    "bosnia y herzegovina": "bosnia herzegovina",
+    "cayman islands": "islas caiman",
+    "guadeloupe": "guadalupe",
+    "martinique": "martinica",
+    "saint lucia": "santa lucia",
+    "st kitts and nevis": "san cristobal y nieves",
+    "saint kitts and nevis": "san cristobal y nieves",
+    "grenada": "granada",
+    "french guiana": "guayana francesa",
+    "scotland": "escocia",
+    "switzerland": "suiza",
+    "slovenia": "eslovenia",
+    "north macedonia": "macedonia del norte",
+    "hungary": "hungria",
+    "ukraine": "ucrania",
+    "northern ireland": "irlanda del norte",
+    "republic of ireland": "irlanda",
+    "poland": "polonia",
+    "bosnia and herzegovina": "bosnia herzegovina",
+    "bosnia herzegovina": "bosnia herzegovina",
+    "romania": "rumania",
+    "sweden": "suecia",
+    "kazakhstan": "kazajistan",
+    "slovakia": "eslovaquia",
+    "faroe islands": "islas feroe",
+    "moldova": "moldavia",
+    "iceland": "islandia",
+    "luxembourg": "luxemburgo",
+    "lithuania": "lituania",
+    "azerbaijan": "azerbaiyan",
+    "bermuda": "bermudas",
+    "saint vincent and the grenadines": "san vicente y las granadinas",
+    "belize": "belice",
+    "antigua and barbuda": "antigua y barbuda",
+    "trinidad and tobago": "trinidad y tobago"
+  },
+  "concacaf_fuente": "https://www.concacaf.com/competitions/nations-league/news/league-b-set-for-historic-2026-27-campaign",
+  "concacaf_grupos": {
+    "BA": [
+      "guyana",
+      "puerto rico",
+      "dominica",
+      "islas caiman"
+    ],
+    "BB": [
+      "guadalupe",
+      "bermudas",
+      "santa lucia",
+      "barbados"
+    ],
+    "BC": [
+      "cuba",
+      "granada",
+      "san cristobal y nieves",
+      "bonaire"
+    ],
+    "BD": [
+      "guayana francesa",
+      "san vicente y las granadinas",
+      "belice",
+      "sint maarten"
+    ]
+  },
+  "playin_fuente": "https://www.concacaf.com/competitions/nations-league/news/2026-27-concacaf-nations-league-november-schedule-confirmed",
+  "playin": [
+    [
+      "aruba",
+      "martinica"
+    ],
+    [
+      "antigua y barbuda",
+      "trinidad y tobago"
+    ],
+    [
+      "el salvador",
+      "saint martin"
+    ],
+    [
+      "nicaragua",
+      "montserrat"
+    ]
+  ]
+}

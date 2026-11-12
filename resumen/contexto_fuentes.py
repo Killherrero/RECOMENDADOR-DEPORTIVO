@@ -94,7 +94,10 @@ def alias_futbol(nombre):
                     'ud sanse':'san sebastian de los reyes', 'cd coria':'coria',
                     'antequera cf':'antequera', 'aguilas fc':'aguilas',
                     'cp mijas las lagunas':'mijas las lagunas', 'real jaen cf':'real jaen',
-                    'unionistas':'unionistas de salamanca'})
+                    'unionistas':'unionistas de salamanca',
+                    'cd artistico navalcarnero':'navalcarnero',
+                    'cs puertollano':'calvo sotelo puertollano',
+                    'cd tarancon':'tarancon'})
     return aliases.get(n, n)
 
 
