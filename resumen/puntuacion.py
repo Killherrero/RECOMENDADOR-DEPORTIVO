@@ -204,7 +204,8 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     afinidad_basica = round(max(-deportivo_basico, min(10-deportivo_basico, afinidad)),2)
     nota_basica = round(max(0, min(10, deportivo_basico + afinidad_basica)), 1)
     afinidad += contexto.get('afinidad', 0)
-    deportivo = round(min(8.5,base + cartel + fase + contexto['ajuste'] + calidad['ajuste'] + rivalidad['ajuste']),2)
+    ajuste_grupo = (seleccion or {}).get('ajuste_grupo', 0)
+    deportivo = round(min(8.5,base + cartel + fase + contexto['ajuste'] + calidad['ajuste'] + rivalidad['ajuste'] + ajuste_grupo),2)
     afinidad = round(max(-deportivo,min(10-deportivo,afinidad)),2)
     nota = round(max(0,min(10,deportivo+afinidad)),1)
     canales = evento.get('canales',[])
@@ -213,7 +214,7 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     return {'score':nota,'prioridad':round(nota+acceso+horario,2),'nivel':nivel_nota(nota),
             'desglose':{'base':base,'cartel':cartel,'fase':fase,'deportivo':deportivo,
                         'afinidad':afinidad,'acceso':acceso,'horario':horario,'contexto':round(nota-nota_basica,1),
-                        'calidad_cruce':calidad['ajuste'], 'rivalidad':rivalidad['ajuste'], 'jerarquia_atp':jerarquia,
+                        'calidad_cruce':calidad['ajuste'], 'grupo_selecciones':ajuste_grupo, 'rivalidad':rivalidad['ajuste'], 'jerarquia_atp':jerarquia,
                         'preferencia_deporte':PREFERENCIA_TENIS if sport == 'Tenis' else 0},
             'favorito_declarado':favorito,
             'evaluacion_selecciones':seleccion,

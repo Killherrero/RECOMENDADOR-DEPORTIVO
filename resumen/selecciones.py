@@ -5,6 +5,7 @@ from datetime import date
 
 from .config import ROOT
 from .perfiles import normalizar
+from .contexto_internacional import aplicar_contexto_seleccion
 
 CATALOGO = json.loads((ROOT / 'data/selecciones_2026.json').read_text(encoding='utf-8'))
 
@@ -46,16 +47,18 @@ def valorar_selecciones(evento):
                 calidad = sum({1:.9, 2:.7, 3:.5, 4:.2}.get(bombo, 0) for bombo in bombos)
                 cartel = round(calidad * {'A':1, 'B':.6, 'C':.4, 'D':0}[liga], 2)
                 fuentes = CATALOGO['fuentes']
-            return {'base':base, 'cartel':cartel, 'grupo':grupo, 'bombos':bombos,
+            seleccion = {'base':base, 'cartel':cartel, 'grupo':grupo, 'bombos':bombos,
                     'fuentes':fuentes, 'vigencia':CATALOGO['fin'],
                     'metodo':'División y siembra de la edición; ranking FIFA pendiente',
                     'motivos':[f'Nations League {"CONCACAF" if concacaf else "UEFA"}: grupo {grupo}']
                               + (['Calidad conjunta por siembra oficial de la edición'] if bombos else [])}
+            return aplicar_contexto_seleccion(evento, seleccion, miembros, equipos)
     if concacaf and dia >= date(2026, 11, 12):
         for pareja in CATALOGO['playin']:
             if set(equipos) == set(pareja):
-                return {'base':3.8, 'cartel':0.0, 'grupo':'Play-in A/C',
+                seleccion = {'base':3.8, 'cartel':0.0, 'grupo':'Play-in A/C',
                         'fuentes':[CATALOGO['playin_fuente']], 'vigencia':CATALOGO['fin'],
                         'metodo':'Cruce play-in confirmado; ranking FIFA pendiente',
                         'motivos':['Nations League CONCACAF: play-in entre ligas A y C']}
+                return aplicar_contexto_seleccion(evento, seleccion, [], equipos)
     return None

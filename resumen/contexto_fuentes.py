@@ -470,6 +470,7 @@ def enriquecer_eventos(eventos, ahora):
     grupos = {}
     for e in eventos:
         e.pop('contexto', None)
+        e.pop('contexto_selecciones', None)
         marcar(e, 'sin_datos', 'competicion_no_cubierta')
         if e.get('deporte') == 'Fútbol' and liga_futbol(e.get('competicion','')) == 'aut.1':
             marcar(e, 'sin_datos', 'liga_austriaca_sin_cobertura')
@@ -492,6 +493,9 @@ def enriquecer_eventos(eventos, ahora):
             liga = 'euro'
         if e.get('deporte') == 'Baloncesto' and re.search(r'\bnba\b', normalizar(e['competicion'])):
             liga = 'nba'
+        from .selecciones import valorar_selecciones
+        if valorar_selecciones(e):
+            liga = 'selecciones'
         if liga:
             marcar(e, 'pendiente', 'pendiente')
             grupos.setdefault(liga, []).append(e)
@@ -509,6 +513,9 @@ def enriquecer_eventos(eventos, ahora):
                 return contextos_copa(items, ahora)
             if liga == 'nba':
                 return contextos_nba(items, ahora)
+            if liga == 'selecciones':
+                from .fuentes_selecciones import contextos_selecciones
+                return contextos_selecciones(items, ahora)
             datos = tabla_euroliga(nombres, ahora) if liga == 'euro' else tabla_futbol(liga, nombres, ahora)
         except (ErrorContexto, KeyError, ValueError, TypeError, IndexError, StopIteration) as error:
             for e in items: marcar(e, 'sin_datos', getattr(error, 'codigo', 'formato_no_valido'))
@@ -533,5 +540,5 @@ def enriquecer_eventos(eventos, ahora):
     elegibles = sum(len(items) for items in grupos.values())
     return [f'Contexto deportivo validado en {cubiertos}/{elegibles} encuentros futuros de las ligas cubiertas. '
             'En el resto se mantiene la nota básica. Cobertura actual: ligas principales de fútbol, Euroliga '
-            'y contraste de categorías en primera ronda de Copa del Rey 2026/27, ranking ATP y fase de NBA Cup. '
+            'y contraste de categorías en primera ronda de Copa del Rey 2026/27, ranking ATP, fase de NBA Cup y ratings Elo de selecciones con escenarios de Liga A UEFA. '
             'Las competiciones o jugadores sin datos conservan su valoración básica.']

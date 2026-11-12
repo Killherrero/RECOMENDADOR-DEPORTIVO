@@ -26,7 +26,7 @@ def version_modelo():
     h = hashlib.sha256()
     for nombre in ('puntuacion.py', 'calidad_cruce.py', 'rivalidades.py', 'calendario.py', 'planning.py', 'contexto.py', 'perfiles.py', 'preferencias_eventos.py',
                    'contexto_fuentes.py', 'fuente_eventos.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py',
-                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py','ligas.py','ncaa.py','selecciones.py'):
+                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py','ligas.py','ncaa.py','selecciones.py','fuentes_selecciones.py','contexto_internacional.py'):
         h.update(nombre.encode())
         h.update((ROOT/'resumen'/nombre).read_bytes().replace(b'\r\n', b'\n'))
     for p in sorted((ROOT/'data').glob('*.json')):
@@ -43,10 +43,18 @@ def serializar(valor):
 
 def preparar_diagnostico(eventos, ahora):
     campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente',
-              'contexto','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad','evaluacion_fase','evaluacion_selecciones',
+              'contexto','contexto_selecciones','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad','evaluacion_fase','evaluacion_selecciones',
               'motivos','inicio','fin_estimado','inicio_vision','fin_vision','vision_parcial')
     registros = [{k:e[k] for k in campos if k in e} for e in eventos.get('filtrados', [])]
     for e in registros:
+        seleccion = e.get('evaluacion_selecciones') or {}
+        rating = bool(seleccion.get('rating'))
+        grupo = seleccion.get('trascendencia', {}).get('estado') == 'escenarios por puntos validados'
+        if rating or grupo:
+            e['diagnostico_contexto'] = {**e.get('diagnostico_contexto', {}),
+                'estado':'validado' if rating and grupo else 'parcial',
+                'motivo':'rating_y_grupo_validados' if rating and grupo else 'cobertura_internacional_parcial'}
+            continue
         evaluacion = e.get('evaluacion_contexto', {})
         if evaluacion.get('estado') == 'validado':
             e['diagnostico_contexto'] = {**e.get('diagnostico_contexto', {}), 'estado':'validado', 'motivo':'con_ajuste' if e.get('desglose',{}).get('contexto') else 'validado_sin_ajuste'}
@@ -54,7 +62,7 @@ def preparar_diagnostico(eventos, ahora):
             e['diagnostico_contexto'] = {**e.get('diagnostico_contexto',{}), 'estado':'parcial', 'motivo':'participante_sin_datos'}
         elif e.get('contexto'):
             e['diagnostico_contexto'] = {**e.get('diagnostico_contexto', {}), 'estado':'sin_datos', 'motivo':evaluacion.get('estado','contexto_no_valido')}
-    cubiertos = sum(e.get('evaluacion_contexto',{}).get('estado') == 'validado' for e in registros)
+    cubiertos = sum(e.get('diagnostico_contexto',{}).get('estado') == 'validado' for e in registros)
     parciales = sum(e.get('diagnostico_contexto',{}).get('estado') == 'parcial' for e in registros)
     resumen = {'relevantes':len(registros), 'validados':cubiertos, 'parciales':parciales,
                'con_ajuste':sum(bool(e.get('desglose',{}).get('contexto')) for e in registros)}
@@ -62,7 +70,7 @@ def preparar_diagnostico(eventos, ahora):
     for e in registros:
         d = por_deporte.setdefault(e['deporte'], {'total':0,'validados':0,'motivos':{}})
         d['total'] += 1
-        d['validados'] += e.get('evaluacion_contexto',{}).get('estado') == 'validado'
+        d['validados'] += e.get('diagnostico_contexto',{}).get('estado') == 'validado'
         motivo = e.get('diagnostico_contexto',{}).get('motivo','sin_diagnostico')
         d['motivos'][motivo] = d['motivos'].get(motivo,0)+1
     snapshot = dict(version=VERSION_DIAGNOSTICO, modelo=version_modelo(), corte=ahora.isoformat(), excluidos=eventos.get('excluidos',[]),
@@ -85,7 +93,7 @@ def reproducir(snapshot):
         raise ValueError('La instantánea corresponde a otra versión del modelo.')
     entradas = []
     campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente',
-              'contexto','diagnostico_contexto')
+              'contexto','contexto_selecciones','diagnostico_contexto')
     for e in snapshot['eventos']:
         entradas.append({k:e[k] for k in campos if k in e})
     resultado = recomendar_eventos(entradas, ahora=datetime.fromisoformat(snapshot['corte']))

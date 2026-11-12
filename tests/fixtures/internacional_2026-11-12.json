@@ -1,0 +1,598 @@
+{
+  "consultado": "2026-11-12T11:45:00+01:00",
+  "grupos": {
+    "A1": {
+      "tabla": {
+        "italia": {
+          "puntos": 7,
+          "jugados": 4
+        },
+        "belgica": {
+          "puntos": 6,
+          "jugados": 4
+        },
+        "turquia": {
+          "puntos": 0,
+          "jugados": 4
+        },
+        "francia": {
+          "puntos": 10,
+          "jugados": 4
+        }
+      },
+      "partidos": [
+        {
+          "id": "401861052",
+          "inicio": "2026-09-25T18:45Z",
+          "local": "italia",
+          "visitante": "belgica",
+          "estado": "post",
+          "goles": [
+            0,
+            2
+          ]
+        },
+        {
+          "id": "401861053",
+          "inicio": "2026-09-25T18:45Z",
+          "local": "turquia",
+          "visitante": "francia",
+          "estado": "post",
+          "goles": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "401861081",
+          "inicio": "2026-09-28T18:45Z",
+          "local": "belgica",
+          "visitante": "francia",
+          "estado": "post",
+          "goles": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "401861077",
+          "inicio": "2026-09-28T18:45Z",
+          "local": "turquia",
+          "visitante": "italia",
+          "estado": "post",
+          "goles": [
+            1,
+            4
+          ]
+        },
+        {
+          "id": "401861109",
+          "inicio": "2026-10-02T18:45Z",
+          "local": "belgica",
+          "visitante": "turquia",
+          "estado": "post",
+          "goles": [
+            3,
+            0
+          ]
+        },
+        {
+          "id": "401861103",
+          "inicio": "2026-10-02T18:45Z",
+          "local": "francia",
+          "visitante": "italia",
+          "estado": "post",
+          "goles": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "401861129",
+          "inicio": "2026-10-05T18:45Z",
+          "local": "francia",
+          "visitante": "belgica",
+          "estado": "post",
+          "goles": [
+            4,
+            1
+          ]
+        },
+        {
+          "id": "401861131",
+          "inicio": "2026-10-05T18:45Z",
+          "local": "italia",
+          "visitante": "turquia",
+          "estado": "post",
+          "goles": [
+            3,
+            1
+          ]
+        },
+        {
+          "id": "401861145",
+          "inicio": "2026-11-12T17:00Z",
+          "local": "turquia",
+          "visitante": "belgica",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861151",
+          "inicio": "2026-11-12T19:45Z",
+          "local": "italia",
+          "visitante": "francia",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861176",
+          "inicio": "2026-11-15T19:45Z",
+          "local": "belgica",
+          "visitante": "italia",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861177",
+          "inicio": "2026-11-15T19:45Z",
+          "local": "francia",
+          "visitante": "turquia",
+          "estado": "pre",
+          "goles": null
+        }
+      ],
+      "fuentes": [
+        "https://site.web.api.espn.com/apis/v2/sports/soccer/uefa.nations/standings?season=2026",
+        "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.nations/scoreboard?dates=2026&limit=200",
+        "https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-17-Match-system-League-A-knockout-stage-Online",
+        "https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-15-Equality-of-points-league-phase-Online"
+      ]
+    },
+    "A2": {
+      "tabla": {
+        "paises bajos": {
+          "puntos": 8,
+          "jugados": 4
+        },
+        "grecia": {
+          "puntos": 8,
+          "jugados": 4
+        },
+        "alemania": {
+          "puntos": 5,
+          "jugados": 4
+        },
+        "serbia": {
+          "puntos": 0,
+          "jugados": 4
+        }
+      },
+      "partidos": [
+        {
+          "id": "401861041",
+          "inicio": "2026-09-24T18:45Z",
+          "local": "paises bajos",
+          "visitante": "alemania",
+          "estado": "post",
+          "goles": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "401861042",
+          "inicio": "2026-09-24T18:45Z",
+          "local": "serbia",
+          "visitante": "grecia",
+          "estado": "post",
+          "goles": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "401861068",
+          "inicio": "2026-09-27T16:00Z",
+          "local": "serbia",
+          "visitante": "paises bajos",
+          "estado": "post",
+          "goles": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "401861074",
+          "inicio": "2026-09-27T18:45Z",
+          "local": "alemania",
+          "visitante": "grecia",
+          "estado": "post",
+          "goles": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "401861097",
+          "inicio": "2026-10-01T18:45Z",
+          "local": "alemania",
+          "visitante": "serbia",
+          "estado": "post",
+          "goles": [
+            2,
+            0
+          ]
+        },
+        {
+          "id": "401861098",
+          "inicio": "2026-10-01T18:45Z",
+          "local": "grecia",
+          "visitante": "paises bajos",
+          "estado": "post",
+          "goles": [
+            2,
+            2
+          ]
+        },
+        {
+          "id": "401861123",
+          "inicio": "2026-10-04T18:45Z",
+          "local": "grecia",
+          "visitante": "alemania",
+          "estado": "post",
+          "goles": [
+            0,
+            0
+          ]
+        },
+        {
+          "id": "401861122",
+          "inicio": "2026-10-04T18:45Z",
+          "local": "paises bajos",
+          "visitante": "serbia",
+          "estado": "post",
+          "goles": [
+            2,
+            1
+          ]
+        },
+        {
+          "id": "401861159",
+          "inicio": "2026-11-13T19:45Z",
+          "local": "paises bajos",
+          "visitante": "grecia",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861158",
+          "inicio": "2026-11-13T19:45Z",
+          "local": "serbia",
+          "visitante": "alemania",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861185",
+          "inicio": "2026-11-16T19:45Z",
+          "local": "alemania",
+          "visitante": "paises bajos",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861188",
+          "inicio": "2026-11-16T19:45Z",
+          "local": "grecia",
+          "visitante": "serbia",
+          "estado": "pre",
+          "goles": null
+        }
+      ],
+      "fuentes": [
+        "https://site.web.api.espn.com/apis/v2/sports/soccer/uefa.nations/standings?season=2026",
+        "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.nations/scoreboard?dates=2026&limit=200",
+        "https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-17-Match-system-League-A-knockout-stage-Online",
+        "https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-15-Equality-of-points-league-phase-Online"
+      ]
+    },
+    "A3": {
+      "tabla": {
+        "espana": {
+          "puntos": 12,
+          "jugados": 4
+        },
+        "inglaterra": {
+          "puntos": 9,
+          "jugados": 4
+        },
+        "chequia": {
+          "puntos": 0,
+          "jugados": 4
+        },
+        "croacia": {
+          "puntos": 3,
+          "jugados": 4
+        }
+      },
+      "partidos": [
+        {
+          "id": "401861063",
+          "inicio": "2026-09-26T18:45Z",
+          "local": "chequia",
+          "visitante": "croacia",
+          "estado": "post",
+          "goles": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "401861066",
+          "inicio": "2026-09-26T18:45Z",
+          "local": "inglaterra",
+          "visitante": "espana",
+          "estado": "post",
+          "goles": [
+            2,
+            3
+          ]
+        },
+        {
+          "id": "401861092",
+          "inicio": "2026-09-29T18:45Z",
+          "local": "chequia",
+          "visitante": "inglaterra",
+          "estado": "post",
+          "goles": [
+            0,
+            2
+          ]
+        },
+        {
+          "id": "401861084",
+          "inicio": "2026-09-29T18:45Z",
+          "local": "espana",
+          "visitante": "croacia",
+          "estado": "post",
+          "goles": [
+            4,
+            1
+          ]
+        },
+        {
+          "id": "401861113",
+          "inicio": "2026-10-03T16:00Z",
+          "local": "croacia",
+          "visitante": "inglaterra",
+          "estado": "post",
+          "goles": [
+            0,
+            7
+          ]
+        },
+        {
+          "id": "401861118",
+          "inicio": "2026-10-03T18:45Z",
+          "local": "espana",
+          "visitante": "chequia",
+          "estado": "post",
+          "goles": [
+            3,
+            1
+          ]
+        },
+        {
+          "id": "401861137",
+          "inicio": "2026-10-06T18:45Z",
+          "local": "croacia",
+          "visitante": "espana",
+          "estado": "post",
+          "goles": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "401861142",
+          "inicio": "2026-10-06T18:45Z",
+          "local": "inglaterra",
+          "visitante": "chequia",
+          "estado": "post",
+          "goles": [
+            3,
+            0
+          ]
+        },
+        {
+          "id": "401861148",
+          "inicio": "2026-11-12T19:45Z",
+          "local": "chequia",
+          "visitante": "espana",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861150",
+          "inicio": "2026-11-12T19:45Z",
+          "local": "inglaterra",
+          "visitante": "croacia",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861178",
+          "inicio": "2026-11-15T19:45Z",
+          "local": "croacia",
+          "visitante": "chequia",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861175",
+          "inicio": "2026-11-15T19:45Z",
+          "local": "espana",
+          "visitante": "inglaterra",
+          "estado": "pre",
+          "goles": null
+        }
+      ],
+      "fuentes": [
+        "https://site.web.api.espn.com/apis/v2/sports/soccer/uefa.nations/standings?season=2026",
+        "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.nations/scoreboard?dates=2026&limit=200",
+        "https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-17-Match-system-League-A-knockout-stage-Online",
+        "https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-15-Equality-of-points-league-phase-Online"
+      ]
+    },
+    "A4": {
+      "tabla": {
+        "noruega": {
+          "puntos": 3,
+          "jugados": 4
+        },
+        "dinamarca": {
+          "puntos": 6,
+          "jugados": 4
+        },
+        "portugal": {
+          "puntos": 12,
+          "jugados": 4
+        },
+        "gales": {
+          "puntos": 3,
+          "jugados": 4
+        }
+      },
+      "partidos": [
+        {
+          "id": "401861046",
+          "inicio": "2026-09-24T18:45Z",
+          "local": "noruega",
+          "visitante": "dinamarca",
+          "estado": "post",
+          "goles": [
+            3,
+            2
+          ]
+        },
+        {
+          "id": "401861044",
+          "inicio": "2026-09-24T18:45Z",
+          "local": "portugal",
+          "visitante": "gales",
+          "estado": "post",
+          "goles": [
+            1,
+            0
+          ]
+        },
+        {
+          "id": "401861070",
+          "inicio": "2026-09-27T16:00Z",
+          "local": "dinamarca",
+          "visitante": "gales",
+          "estado": "post",
+          "goles": [
+            2,
+            0
+          ]
+        },
+        {
+          "id": "401861073",
+          "inicio": "2026-09-27T18:45Z",
+          "local": "noruega",
+          "visitante": "portugal",
+          "estado": "post",
+          "goles": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "401861096",
+          "inicio": "2026-10-01T18:45Z",
+          "local": "dinamarca",
+          "visitante": "portugal",
+          "estado": "post",
+          "goles": [
+            2,
+            4
+          ]
+        },
+        {
+          "id": "401861100",
+          "inicio": "2026-10-01T18:45Z",
+          "local": "gales",
+          "visitante": "noruega",
+          "estado": "post",
+          "goles": [
+            2,
+            1
+          ]
+        },
+        {
+          "id": "401861126",
+          "inicio": "2026-10-04T18:45Z",
+          "local": "portugal",
+          "visitante": "noruega",
+          "estado": "post",
+          "goles": [
+            2,
+            1
+          ]
+        },
+        {
+          "id": "401861125",
+          "inicio": "2026-10-04T18:45Z",
+          "local": "gales",
+          "visitante": "dinamarca",
+          "estado": "post",
+          "goles": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "401861165",
+          "inicio": "2026-11-14T17:00Z",
+          "local": "noruega",
+          "visitante": "gales",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861167",
+          "inicio": "2026-11-14T19:45Z",
+          "local": "portugal",
+          "visitante": "dinamarca",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861194",
+          "inicio": "2026-11-17T19:45Z",
+          "local": "dinamarca",
+          "visitante": "noruega",
+          "estado": "pre",
+          "goles": null
+        },
+        {
+          "id": "401861189",
+          "inicio": "2026-11-17T19:45Z",
+          "local": "gales",
+          "visitante": "portugal",
+          "estado": "pre",
+          "goles": null
+        }
+      ],
+      "fuentes": [
+        "https://site.web.api.espn.com/apis/v2/sports/soccer/uefa.nations/standings?season=2026",
+        "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.nations/scoreboard?dates=2026&limit=200",
+        "https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-17-Match-system-League-A-knockout-stage-Online",
+        "https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-15-Equality-of-points-league-phase-Online"
+      ]
+    }
+  },
+  "elo_publicado": "2026-11-12T09:50:56+00:00"
+}
