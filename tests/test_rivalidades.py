@@ -16,7 +16,7 @@ class RivalidadesTests(unittest.TestCase):
         self.assertEqual(len(claves),len(set(claves)))
         for r in REGISTRO:
             self.assertTrue(r['fuente'].startswith('https://'))
-            self.assertTrue(0 < r['bonus'] <= .6)
+            self.assertTrue(0 < r['bonus'] <= (2.2 if r.get('intensidad') == 'maxima' else .6))
             self.assertIn(r['tipo'], ('Derbi local','Rivalidad histórica'))
 
     def test_simetria_todas_las_parejas(self):

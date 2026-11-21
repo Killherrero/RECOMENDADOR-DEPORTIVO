@@ -19,6 +19,10 @@ def categoria_tenis(evento):
     comp = normalizar(evento['competicion'])
     if re.search(r'\b(?:wta|challenger|itf|junior|qualifying|qualy)\b', comp):
         return None, 'Sin categoría ATP principal reconocida'
+    if re.search(r'\b(?:next[ -]?gen|next generation|dobles|doubles)\b', comp):
+        return None, 'Fuera del circuito ATP principal de individuales'
+    if re.search(r'\batp(?: world tour)? finals\b', comp):
+        return 'ATP Finals', 'Categoría oficial ATP Finals: ' + catalogo_tenis()['fuente_atp_finals']
     for patron, categoria in [(r'\bgrand slam\b', 'Grand Slam'),
                                (r'\b(?:atp\s+)?masters\s+1000\b', 'Masters 1000'),
                                (r'\batp\s*500\b', 'ATP 500'),
@@ -36,7 +40,7 @@ def categoria_tenis(evento):
 
 def bonus_categoria_tenis(evento):
     categoria, _ = categoria_tenis(evento)
-    return {'Grand Slam':4, 'Masters 1000':3, 'ATP 500':2, 'ATP 250':1}.get(categoria, 0)
+    return {'ATP Finals':3.5, 'Grand Slam':4, 'Masters 1000':3, 'ATP 500':2, 'ATP 250':1}.get(categoria, 0)
 
 
 def segunda_ronda_octavos(evento):

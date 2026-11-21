@@ -59,5 +59,6 @@ def valorar_rivalidad(evento):
         if r.get('ambito') == 'selecciones' and not ambito_selecciones(evento):
             continue
         if r['deporte'] == evento['deporte'] and pareja == set(r['equipos']):
-            return {**r, 'ajuste': min(.6, r['bonus']), 'estado': 'verificada'}
+            limite = {'maxima':2.2, 'destacada':1.2}.get(r.get('intensidad'), .6)
+            return {**r, 'ajuste': min(limite, r['bonus']), 'estado': 'verificada'}
     return vacio

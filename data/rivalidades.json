@@ -49,11 +49,12 @@
     ],
     "tipo": "Derbi local",
     "nombre": "Derbi sevillano",
-    "bonus": 0.45,
-    "fuente": "https://www.laliga.com/en-ES/partidazos",
-    "verificado": "2026-10-28",
+    "bonus": 2.2,
+    "fuente": "https://www.laliga.com/partidazos/el-gran-derbi",
+    "verificado": "2026-11-21",
     "ambito": "clubes",
-    "region": "España"
+    "region": "España",
+    "intensidad": "maxima"
   },
   {
     "deporte": "Fútbol",
@@ -726,5 +727,19 @@
     "verificado": "2026-11-08",
     "region": "Italia",
     "ambito": "clubes"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "feyenoord",
+      "excelsior"
+    ],
+    "tipo": "Derbi local",
+    "nombre": "Derbi de Róterdam",
+    "bonus": 0.35,
+    "fuente": "https://www.feyenoord.com/nl/news/rotterdams-voorprogramma-bij-stadsderby-tegen-excelsior-131126",
+    "verificado": "2026-11-21",
+    "ambito": "clubes",
+    "region": "Países Bajos"
   }
 ]

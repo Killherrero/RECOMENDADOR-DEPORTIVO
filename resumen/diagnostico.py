@@ -43,7 +43,7 @@ def serializar(valor):
 
 def preparar_diagnostico(eventos, ahora):
     campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente',
-              'contexto','contexto_selecciones','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad','evaluacion_fase','evaluacion_selecciones',
+              'contexto','contexto_selecciones','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad','evaluacion_fase','evaluacion_selecciones','eliminatoria_argentina',
               'motivos','inicio','fin_estimado','inicio_vision','fin_vision','vision_parcial')
     registros = [{k:e[k] for k in campos if k in e} for e in eventos.get('filtrados', [])]
     for e in registros:

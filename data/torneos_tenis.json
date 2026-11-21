@@ -3,6 +3,7 @@
   "fuente": "https://www.atptour.com/-/media/files/media-guide/2026/2026-atp-media-guide-full-updated.pdf",
   "calendario": "https://www.atptour.com/en/news/what-is-the-2026-atp-tour-calendar/",
   "verificado": "2026-10-26",
+  "fuente_atp_finals": "https://www.nittoatpfinals.com/en/event/rules-and-format",
   "torneos": [
     {"categoria": "Grand Slam", "alias": ["australian open", "open de australia", "abierto de australia"]},
     {"categoria": "Grand Slam", "alias": ["roland garros"]},

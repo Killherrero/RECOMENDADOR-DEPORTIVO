@@ -19,6 +19,8 @@ def valorar_contexto(evento):
             return {**vacio, 'estado': 'datos fuera del corte temporal'}
         if c['temporada'] != temporada(inicio):
             return {**vacio, 'estado': 'otra temporada'}
+        if c.get('competicion') == 'bra.1' and any(c[lado].get('temporada_fuente') != inicio.year for lado in ('local', 'visitante')):
+            raise ValueError('Temporada brasileña no validada')
         if c.get('tipo') == 'nba':
             if (evento['deporte'] != 'Baloncesto' or 'nba' not in normalizar(evento['competicion']).split()
                     or c.get('competicion') != 'nba' or c.get('estado_partido') != 'pre'

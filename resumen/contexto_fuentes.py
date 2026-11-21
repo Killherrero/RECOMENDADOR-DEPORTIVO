@@ -66,7 +66,7 @@ def liga_evento(e):
     for tokens, liga in [(['hypermotion'], 'esp.2'),
                          (['laliga', 'la liga', 'ea sports'], 'esp.1'),
                          (['premier league'], 'eng.1'), (['serie a italiana', 'italian serie a'], 'ita.1'),
-                         (['bundesliga'], 'ger.1'), (['ligue 1'], 'fra.1')]:
+                         (['bundesliga'], 'ger.1'), (['ligue 1'], 'fra.1'), (['serie a brasil','brasileirao'], 'bra.1')]:
         if any(t in comp for t in tokens):
             return liga
     return None
@@ -94,7 +94,7 @@ def alias_futbol(nombre):
                     'ud sanse':'san sebastian de los reyes', 'cd coria':'coria',
                     'antequera cf':'antequera', 'aguilas fc':'aguilas',
                     'cp mijas las lagunas':'mijas las lagunas', 'real jaen cf':'real jaen',
-                    'unionistas':'unionistas de salamanca',
+                    'unionistas':'unionistas de salamanca', 'cr flamengo':'flamengo', 'se palmeiras':'palmeiras',
                     'cd artistico navalcarnero':'navalcarnero',
                     'cs puertollano':'calvo sotelo puertollano',
                     'cd tarancon':'tarancon'})
@@ -137,13 +137,13 @@ def historial_futbol(datos, equipo_id, liga, year, corte):
 
 
 def tabla_futbol(liga, nombres, ahora):
-    year = temporada(ahora)
+    year = ahora.year if liga == 'bra.1' else temporada(ahora)
     url = f'{TABLAS}/{liga}/standings'
     datos = descargar_json(url)
     if datos.get('season', {}).get('year') != year:
         raise ErrorContexto('Tabla de otra temporada.', 'otra_temporada')
     entries = entradas_tabla(datos)
-    esperados = {'esp.1':20,'esp.2':22,'ita.1':20,'eng.1':20,'ger.1':18,'fra.1':18}
+    esperados = {'esp.1':20,'esp.2':22,'ita.1':20,'eng.1':20,'ger.1':18,'fra.1':18,'bra.1':20}
     if len({str(r['team']['id']) for r in entries}) != esperados[liga]:
         raise ErrorContexto('Clasificación parcial o con equipos duplicados.', 'tabla_incompleta')
     encontrados = ResultadoContexto()
@@ -177,7 +177,7 @@ def tabla_futbol(liga, nombres, ahora):
             continue
         encontrados[nombre] = {'nombre': nombre, 'id':equipo_id, 'posicion': position, 'jugados': gp,
                               'victorias': wins, 'derrotas': losses, 'forma': ''.join(x for _, x in hist[:5]),
-                              'fuentes': [url, historial_url], 'ultimo_partido': hist[0][0].isoformat()}
+                              'fuentes': [url, historial_url], 'temporada_fuente':year, 'ultimo_partido': hist[0][0].isoformat()}
     return encontrados
 
 

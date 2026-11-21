@@ -57,7 +57,7 @@ class MejorasEventosTests(unittest.TestCase):
                 self.assertEqual(len(recomendar_eventos([evento(comp=comp)])['filtrados']),1)
         self.assertEqual(calculate_score(evento(comp='La Liga EA Sports')),calculate_score(evento(comp='LaLiga EA Sports')))
         self.assertEqual(calculate_score(evento(comp='Eredivisie')),4.5)
-        self.assertEqual(calculate_score(evento(comp='Serie A Brasil')),3.5)
+        self.assertEqual(calculate_score(evento(comp='Serie A Brasil')),4.2)
         self.assertEqual(calculate_score(evento(comp='LaLiga Hypermotion')),4.5)
 
     def test_ningun_seleccionado_desaparece_del_plan_ni_del_correo(self):

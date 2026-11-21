@@ -1,5 +1,6 @@
 """Reconocimiento editorial moderado; las fuentes no dictan estos pesos."""
 import json
+import re
 from .config import ROOT
 from .perfiles import normalizar, identidad_basket
 
@@ -31,3 +32,18 @@ def perfiles_futbol(evento):
                 parejas.append({**p, 'lado':lado})
                 break
     return parejas
+
+
+def fase_argentina(evento, ronda, fase):
+    """Edición AFA 2026: sustitución acotada del peso de eliminatorias a partido único."""
+    comp = normalizar(evento.get('competicion', ''))
+    if (evento.get('deporte') != 'Fútbol' or 'primera division argentina' not in comp
+            or not str(evento.get('fecha') or '').startswith('2026-')
+            or re.search(r'\b(?:ida|vuelta|sub\s*\d+|u\s*\d+|femenin[oa]|women|juvenil|junior)\b', comp)):
+        return None
+    pesos = {1.0:1.2, 1.5:1.6, 2.0:2.0, 2.5:2.4}
+    if ronda not in pesos:
+        return None
+    return dict(ajuste=max(fase, pesos[ronda]), formato='Eliminatoria a partido único',
+                fuente='https://assets1.afa.com.ar/2026/BOLETINES/Boletin-Resoluciones-6818---Complementario-01---Reglamento-Torneos-LPF-Primera-2026.pdf',
+                temporada=2026)

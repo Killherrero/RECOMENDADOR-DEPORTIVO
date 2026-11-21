@@ -342,5 +342,31 @@
     "fuente": "https://www.realvalladolid.es/historia",
     "verificado": "2026-11-08",
     "ambito": "clubes"
+  },
+  {
+    "nombre": "Palmeiras",
+    "alias": [
+      "palmeiras",
+      "se palmeiras",
+      "sociedade esportiva palmeiras"
+    ],
+    "puntos": 0.8,
+    "nivel": "referente",
+    "fuente": "https://www.cbf.com.br/futebol-brasileiro/noticias/detalhes/noticias/flamengo-vence-palmeiras-e-ganha-o-tetra-da-libertadores",
+    "verificado": "2026-11-21",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Flamengo",
+    "alias": [
+      "flamengo",
+      "cr flamengo",
+      "clube de regatas do flamengo"
+    ],
+    "puntos": 0.8,
+    "nivel": "referente",
+    "fuente": "https://www.cbf.com.br/futebol-brasileiro/noticias/detalhes/noticias/flamengo-vence-palmeiras-e-ganha-o-tetra-da-libertadores",
+    "verificado": "2026-11-21",
+    "ambito": "clubes"
   }
 ]

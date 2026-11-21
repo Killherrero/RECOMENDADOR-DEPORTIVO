@@ -9,7 +9,7 @@ from .calidad_cruce import valorar_cruce
 from .rivalidades import valorar_rivalidad
 from .favoritos import favorito_declarado
 from .sesiones import sesion_motor, final_padel_espana
-from .reconocimiento import perfiles_futbol, perfiles_acb
+from .reconocimiento import perfiles_futbol, perfiles_acb, fase_argentina
 from .ligas import liga_futbol
 from .selecciones import valorar_selecciones
 
@@ -43,7 +43,8 @@ def base_futbol(comp):
     # Especificidad antes de términos amplios: segunda división no equivale a primera.
     for tokens, valor, motivo in [
         (['hypermotion','2. bundesliga'],4.3,'Segunda división de interés'),
-        (['serie a brasil','primera division argentina'],3.3,'Primera división sudamericana'),
+        (['serie a brasil','brasileirao'],4.0,'Primera división brasileña'),
+        (['primera division argentina'],3.3,'Primera división argentina'),
         (['copa del mundo','world cup','fifa copa mundial'],6.2,'Competición mundial'),
         (['eurocopa','copa america'],5.8,'Torneo continental de selecciones'),
         (['champions league','europa league'],5.6,'Competición europea principal'),
@@ -79,6 +80,10 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
     seleccion = valorar_selecciones(evento)
     # El bonus de fase anterior distingue final, semifinal, cuartos y octavos.
     fase = {2.5:2.4, 2.0:1.6, 1.5:1.0, 1.0:0.6, 0.8:0.3}.get(ronda, 0)
+    eliminatoria_argentina = fase_argentina(evento, ronda, fase)
+    if eliminatoria_argentina:
+        fase = eliminatoria_argentina['ajuste']
+        motivos.append('Eliminatoria argentina a partido único; peso de ronda sustituido')
     if contexto.get('fase_nba'):
         # Una fase confirmada no se premia dos veces con la ronda del título.
         contexto['ajuste'] = max(0, contexto['ajuste'] - fase)
@@ -142,7 +147,7 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         if 'minicopa' in competicion:base = 2.0
     elif sport == 'Tenis':
         categoria, _ = categoria_tenis(evento)
-        base = {'Grand Slam':5.8,'Masters 1000':5.0,'ATP 500':4.4,'ATP 250':3.8}.get(categoria,3.2)
+        base = {'ATP Finals':5.6, 'Grand Slam':5.8,'Masters 1000':5.0,'ATP 500':4.4,'ATP 250':3.8}.get(categoria,3.2)
         perfiles = [perfil_tenis(p) for p in (local, visitante)]
         n = sum(p is not None for p in perfiles)
         cartel = sum(1.2 if p == 'figura' else 0.5 if p in ('referente','reconocido') else 0 for p in perfiles)
@@ -223,5 +228,6 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
             'perfiles_acb':perfiles_acb(evento),
             'evaluacion_rivalidad':rivalidad,
             'evaluacion_fase':fase_verificada,
+            'eliminatoria_argentina':eliminatoria_argentina,
             'evaluacion_contexto':contexto,
             'motivos':motivos, 'escala':'personal-10-v2'}
