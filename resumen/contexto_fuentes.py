@@ -410,7 +410,7 @@ def contextos_tenis(items, ahora):
 
 
 def contextos_nba(items, ahora):
-    """Solo metadatos prospectivos; nunca conservar resultados o estadísticas."""
+    """Encuentros futuros y agregados históricos validados, sin resultados individuales."""
     fechas = {}
     for e in items:
         inicio = datetime.fromisoformat(f"{e['fecha']}T{e['hora']}").replace(tzinfo=MADRID_TZ)
@@ -459,6 +459,8 @@ def contextos_nba(items, ahora):
                 cubiertos += 1
             else:
                 marcar(e, 'sin_datos', 'identidad_ambigua' if candidatos else 'partido_no_confirmado')
+    from .contexto_nba_directo import completar_nba
+    completar_nba(items, ahora)
     return cubiertos
 
 
@@ -540,5 +542,5 @@ def enriquecer_eventos(eventos, ahora):
     elegibles = sum(len(items) for items in grupos.values())
     return [f'Contexto deportivo validado en {cubiertos}/{elegibles} encuentros futuros de las ligas cubiertas. '
             'En el resto se mantiene la nota básica. Cobertura actual: ligas principales de fútbol, Euroliga '
-            'y contraste de categorías en primera ronda de Copa del Rey 2026/27, ranking ATP, fase de NBA Cup y ratings Elo de selecciones con escenarios de Liga A UEFA. '
+            'y contraste de categorías en primera ronda de Copa del Rey 2026/27, ranking ATP, fase y contexto de NBA en directo y ratings Elo de selecciones con escenarios de Liga A UEFA. '
             'Las competiciones o jugadores sin datos conservan su valoración básica.']

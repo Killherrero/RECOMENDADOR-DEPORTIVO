@@ -18,7 +18,11 @@ def valorar_cruce(evento, contexto, cartel):
         posiciones = [datos[k]['posicion'] for k in ('local', 'visitante')]
         objetivo = 2.0 if max(posiciones) <= 5 else 1.2 if max(posiciones) <= 8 else 0
         motivo = 'Calidad conjunta: ambos equipos en la zona alta de la Euroliga'
+    elif datos.get('tipo') == 'nba' and contexto.get('forma_nba', {}).get('estado') == 'validado':
+        objetivo = contexto['forma_nba']['objetivo_cartel']
+        motivo = 'Calidad conjunta NBA: nivel actual de ambos equipos contrastado'
     # Catálogo y contexto ya pueden reconocer el mismo atractivo: solo completar.
-    ajuste = round(max(0.0, objetivo - cartel - contexto['ajuste']), 2)
+    contexto_equivalente = contexto.get('ajuste_forma_nba', contexto['ajuste'])
+    ajuste = round(max(0.0, objetivo - cartel - contexto_equivalente), 2)
     return {'ajuste': ajuste, 'objetivo': objetivo,
             'motivos': [motivo] if ajuste else []}

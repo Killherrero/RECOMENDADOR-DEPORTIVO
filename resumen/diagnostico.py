@@ -26,7 +26,7 @@ def version_modelo():
     h = hashlib.sha256()
     for nombre in ('puntuacion.py', 'calidad_cruce.py', 'rivalidades.py', 'calendario.py', 'planning.py', 'contexto.py', 'perfiles.py', 'preferencias_eventos.py',
                    'contexto_fuentes.py', 'fuente_eventos.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py',
-                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py','ligas.py','ncaa.py','selecciones.py','fuentes_selecciones.py','contexto_internacional.py'):
+                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py','ligas.py','ncaa.py','selecciones.py','fuentes_selecciones.py','contexto_internacional.py','contexto_nba_directo.py'):
         h.update(nombre.encode())
         h.update((ROOT/'resumen'/nombre).read_bytes().replace(b'\r\n', b'\n'))
     for p in sorted((ROOT/'data').glob('*.json')):

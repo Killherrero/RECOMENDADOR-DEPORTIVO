@@ -32,9 +32,13 @@ def valorar_contexto(evento):
                 raise ValueError()
             fase = c.get('fase')
             ajuste = {'grupos':.3, 'cuartos':.6, 'semifinal':.9, 'final':1.2}.get(fase, 0) if c.get('copa') is True else 0
-            return {'ajuste':ajuste, 'estado':'validado', 'fase_nba':fase,
-                    'motivos':[f'NBA Cup: {fase} confirmado por encuentro'] if ajuste else [],
-                    'fuentes':c['fuentes'], 'consultado':c['consultado']}
+            from .contexto_nba_directo import valorar_forma
+            forma = valorar_forma(c, consulta)
+            return {'ajuste':ajuste + forma['ajuste'], 'ajuste_fase_nba':ajuste,
+                    'ajuste_forma_nba':forma['ajuste'], 'forma_nba':forma,
+                    'estado':'validado', 'fase_nba':fase,
+                    'motivos':([f'NBA Cup: {fase} confirmado por encuentro'] if ajuste else []) + forma['motivos'],
+                    'fuentes':list(dict.fromkeys(c['fuentes'] + forma['fuentes'])), 'consultado':c['consultado']}
         if c.get('tipo') == 'tenis':
             if evento['deporte'] != 'Tenis' or c.get('competicion') != 'atp' or not c.get('fuentes'):
                 raise ValueError()

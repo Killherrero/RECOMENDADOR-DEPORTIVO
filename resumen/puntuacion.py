@@ -86,7 +86,8 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         motivos.append('Eliminatoria argentina a partido único; peso de ronda sustituido')
     if contexto.get('fase_nba'):
         # Una fase confirmada no se premia dos veces con la ronda del título.
-        contexto['ajuste'] = max(0, contexto['ajuste'] - fase)
+        contexto['ajuste'] = (max(0, contexto.get('ajuste_fase_nba', contexto['ajuste']) - fase)
+                              + contexto.get('ajuste_forma_nba', 0))
     if sport == 'Fútbol':
         base, motivo = base_futbol(competicion)
         motivos.append(motivo)
