@@ -61,6 +61,8 @@ def liga_evento(e):
     if e.get('deporte') != 'Fútbol':
         return None
     comp = normalizar(e['competicion'])
+    if (comp.startswith('champions league') or comp.startswith('uefa champions league')) and any(fase in comp for fase in ('fase liga','league phase')) and not re.search(r'\b(?:youth|women|femenin[oa]|sub\s*\d+|u\s*\d+|qualifying|previa)\b', comp):
+        return 'uefa.champions'
     if 'bundesliga' in comp:
         return 'ger.1' if liga_futbol(e['competicion']) == 'ger.1' else None
     for tokens, liga in [(['hypermotion'], 'esp.2'),
@@ -94,7 +96,8 @@ def alias_futbol(nombre):
                     'ud sanse':'san sebastian de los reyes', 'cd coria':'coria',
                     'antequera cf':'antequera', 'aguilas fc':'aguilas',
                     'cp mijas las lagunas':'mijas las lagunas', 'real jaen cf':'real jaen',
-                    'unionistas':'unionistas de salamanca', 'cr flamengo':'flamengo', 'se palmeiras':'palmeiras',
+                    'unionistas':'unionistas de salamanca', 'cr flamengo':'flamengo', 'aek fc':'aek athens', 'bod glimt':'bodo glimt', 'aek athens fc':'aek athens',
+                    'sk slovan bratislava':'slovan bratislava', 'rc lens':'lens', 'se palmeiras':'palmeiras',
                     'cd artistico navalcarnero':'navalcarnero',
                     'cs puertollano':'calvo sotelo puertollano',
                     'cd tarancon':'tarancon'})
@@ -116,6 +119,8 @@ def historial_futbol(datos, equipo_id, liga, year, corte):
     resultados, vistos = [], set()
     for e in datos.get('events', []):
         if e.get('league', {}).get('slug') != liga or e.get('season', {}).get('year') != year:
+            continue
+        if liga == 'uefa.champions' and normalizar(e.get('seasonType', {}).get('name','')) != 'league phase':
             continue
         comp = e.get('competitions', [{}])[0]
         if comp.get('status', {}).get('type', {}).get('completed') is not True:
@@ -143,9 +148,11 @@ def tabla_futbol(liga, nombres, ahora):
     if datos.get('season', {}).get('year') != year:
         raise ErrorContexto('Tabla de otra temporada.', 'otra_temporada')
     entries = entradas_tabla(datos)
-    esperados = {'esp.1':20,'esp.2':22,'ita.1':20,'eng.1':20,'ger.1':18,'fra.1':18,'bra.1':20}
+    esperados = {'esp.1':20,'esp.2':22,'ita.1':20,'eng.1':20,'ger.1':18,'fra.1':18,'bra.1':20,'uefa.champions':36}
     if len({str(r['team']['id']) for r in entries}) != esperados[liga]:
         raise ErrorContexto('Clasificación parcial o con equipos duplicados.', 'tabla_incompleta')
+    if liga == 'uefa.champions' and (len(datos.get('children',[])) != 1 or normalizar(datos['children'][0].get('name','')) != 'league phase'):
+        raise ErrorContexto('Fase Champions no confirmada.', 'fase_no_confirmada')
     encontrados = ResultadoContexto()
     historiales = {}
     for nombre in nombres:
@@ -158,7 +165,8 @@ def tabla_futbol(liga, nombres, ahora):
         stats = {s['name']: s.get('value') for s in r['stats']}
         gp, wins, draws, losses = (int(stats[k]) for k in ('gamesPlayed', 'wins', 'ties', 'losses'))
         position = int(stats['rank'])
-        if gp != wins + draws + losses or gp < 1 or not 1 <= position <= len(entries):
+        if (gp != wins + draws + losses or gp < 1 or not 1 <= position <= len(entries)
+                or liga == 'uefa.champions' and (gp > 8 or int(stats['points']) != wins*3+draws)):
             encontrados.fallo(nombre, 'balance_no_valido')
             continue
         equipo_id = str(r['team']['id'])
@@ -177,7 +185,8 @@ def tabla_futbol(liga, nombres, ahora):
             continue
         encontrados[nombre] = {'nombre': nombre, 'id':equipo_id, 'posicion': position, 'jugados': gp,
                               'victorias': wins, 'derrotas': losses, 'forma': ''.join(x for _, x in hist[:5]),
-                              'fuentes': [url, historial_url], 'temporada_fuente':year, 'ultimo_partido': hist[0][0].isoformat()}
+                              'fuentes': [url, historial_url], 'temporada_fuente':year, 'ultimo_partido': hist[0][0].isoformat(),
+                              **({'fase_competicion':'league phase', 'puntos':wins*3+draws} if liga == 'uefa.champions' else {})}
     return encontrados
 
 
@@ -532,7 +541,8 @@ def enriquecer_eventos(eventos, ahora):
                 e['diagnostico_contexto']['datos_parciales'] = {k:datos[e[k]] for k in ('local','visitante') if e[k] in datos}
             if e['local'] in datos and e['visitante'] in datos:
                 e['contexto'] = {'consultado': ahora.isoformat(), 'temporada': temporada(ahora),
-                                 'competicion': liga, 'local': datos[e['local']], 'visitante': datos[e['visitante']]}
+                                 'competicion': liga, 'local': datos[e['local']], 'visitante': datos[e['visitante']],
+                                 **({'tipo':'champions'} if liga == 'uefa.champions' else {})}
         return sum('contexto' in e for e in items)
 
     if not grupos:

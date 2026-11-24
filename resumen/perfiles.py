@@ -9,10 +9,12 @@ def normalizar(nombre):
     return ' '.join(re.sub(r'[^a-z0-9 ]', ' ', nombre).split())
 
 
-CODIGOS_EUROLIGA = {'IST':'efes', 'HTA':'hapoel tel aviv', 'ASV':'asvel',
+CODIGOS_EUROLIGA = {'BES':'besiktas', 'IST':'efes', 'HTA':'hapoel tel aviv', 'ASV':'asvel',
                      'PAR':'partizan', 'VIR':'virtus', 'ZAL':'zalgiris'}
 
 ALIAS_BASKET = {
+    'besiktas jk istanbul':'besiktas', 'besiktas fuzul istanbul':'besiktas',
+    'besiktas gain istanbul':'besiktas',
     'joventut badalona':'joventut', 'asisa joventut':'joventut', 'club joventut badalona':'joventut',
     'la laguna tenerife':'tenerife', 'lenovo tenerife':'tenerife', 'iberostar tenerife':'tenerife', 'cb canarias':'tenerife',
     'unicaja malaga':'unicaja', 'unicaja baloncesto':'unicaja', 'cb malaga':'unicaja',

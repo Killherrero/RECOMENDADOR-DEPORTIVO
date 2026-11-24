@@ -17,7 +17,11 @@ def valorar_cruce(evento, contexto, cartel):
     elif evento['deporte'] == 'Baloncesto' and datos.get('competicion') == 'euro':
         posiciones = [datos[k]['posicion'] for k in ('local', 'visitante')]
         objetivo = 2.0 if max(posiciones) <= 5 else 1.2 if max(posiciones) <= 8 else 0
-        motivo = 'Calidad conjunta: ambos equipos en la zona alta de la Euroliga'
+        equipos = [datos[k] for k in ('local', 'visitante')]
+        muestra = all(e.get('jugados',0) >= 10 and e.get('victorias',0)/e['jugados'] >= .6 for e in equipos)
+        if muestra and max(posiciones) <= 8:
+            objetivo = 2.6 if max(posiciones) <= 5 else 2.4
+        motivo = 'Calidad conjunta: nivel actual de ambos equipos de Euroliga contrastado'
     elif datos.get('tipo') == 'nba' and contexto.get('forma_nba', {}).get('estado') == 'validado':
         objetivo = contexto['forma_nba']['objetivo_cartel']
         motivo = 'Calidad conjunta NBA: nivel actual de ambos equipos contrastado'

@@ -121,6 +121,23 @@ def valorar_contexto(evento):
                 raise ValueError()
             if not e['fuentes']:
                 raise ValueError()
+        if c.get('tipo') == 'champions':
+            if c.get('competicion') != 'uefa.champions' or any(
+                    e.get('fase_competicion') != 'league phase' or e.get('temporada_fuente') != temporada(inicio)
+                    or not 3 <= e['jugados'] <= 8 or not 1 <= e['posicion'] <= 36 or e.get('puntos') != e['victorias']*3 + e['jugados']-e['victorias']-e['derrotas']
+                    for e in equipos):
+                raise ValueError('Fase, edición o muestra Champions sin validar')
+            ajuste = max(.4 if any(e['victorias']/e['jugados'] >= .75 for e in equipos) else 0,
+                         .25 if any(e['forma'].startswith('WW') for e in equipos) else 0)
+            fuerte, debil = sorted(equipos, key=lambda equipo:equipo['posicion'])
+            desequilibrio = debil['posicion']-fuerte['posicion'] >= 16 and debil['victorias']/debil['jugados'] <= .25
+            if desequilibrio:
+                ajuste = min(ajuste, .2)
+            fuentes = list(dict.fromkeys(url for e in equipos for url in e['fuentes']))
+            return dict(ajuste=ajuste, estado='validado', consultado=c['consultado'], fuentes=fuentes,
+                        moderacion_champions=desequilibrio,
+                        motivos=['Rendimiento europeo anterior al encuentro contrastado'] if ajuste else [],
+                        fase_champions='league phase')
         if any(e['jugados'] < 5 for e in equipos):
             return {**vacio, 'estado': 'muestra inferior a cinco partidos'}
         candidatos = [(0.0, 'Sin señal excepcional en el contexto disponible')]
