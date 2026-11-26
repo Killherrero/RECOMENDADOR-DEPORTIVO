@@ -12,6 +12,7 @@ from .sesiones import sesion_motor, final_padel_espana
 from .reconocimiento import perfiles_futbol, perfiles_acb, fase_argentina
 from .ligas import liga_futbol
 from .selecciones import valorar_selecciones
+from .ncaa import universidad_relevante
 
 UMBRAL_PLAN = 6.5
 UMBRAL_PLAN_TENIS = 7.5
@@ -120,16 +121,23 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
                 afinidad = 1.3
                 motivos.append('Juegan tus Celtics')
         else:
-            base = (5.8 if any(x in competicion for x in ['mundial','copa del mundo','world cup','eurobasket','olimpic']) else
+            base = (3.5 if 'amistos' in competicion or 'friendly' in competicion else
+                    5.2 if any(x in competicion for x in ('clasifica','qualif')) else
+                    5.8 if any(x in competicion for x in ['mundial','copa del mundo','world cup','eurobasket','olimpic']) else
                     5.0 if any(x in competicion for x in ('euroliga', 'euroleague')) else
                     4.5 if any(x in competicion for x in ['endesa','acb','copa del rey']) else 3.5)
             equipos = [identidad_basket(e) for e in (local, visitante)]
             referentes = REFERENTES_EUROLIGA if any(x in competicion for x in ('euroliga', 'euroleague')) else REFERENTES_ACB
             n = sum(e in referentes for e in equipos)
-            if favorito == 'Estudiantes':
+            if favorito in ('Estudiantes','España'):
                 afinidad = 1.3
-                motivos.append('Juega tu Estudiantes; preferencia personal separada del nivel de la liga')
+                motivos.append('Juega uno de tus favoritos de baloncesto; afinidad separada del interés deportivo')
         cartel = 1.5 if n == 2 else 0.8 if n == 1 else 0
+        if 'ncaa' in competicion:
+            base = 4.0
+            reconocidas = sum(universidad_relevante(e) for e in (local, visitante))
+            cartel = 1.2 if reconocidas == 2 else .8 if reconocidas == 1 else 0
+            motivos.append('NCAA: reconocimiento editorial de programas; no equivale a ranking actual')
         if perfiles_acb(evento):
             perfiles_acb_actuales = perfiles_acb(evento)
             n_acb = n + sum(p['nivel'] == 'referente' for p in perfiles_acb_actuales)

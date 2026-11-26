@@ -14,7 +14,8 @@ def favorito_declarado(evento):
         }
     elif evento.get('deporte') == 'Baloncesto':
         grupos = {'Estudiantes':{'estudiantes','movistar estudiantes','estudiantes baloncesto'},
-                  'Celtics':{'celtics','boston celtics'}}
+                  'Celtics':{'celtics','boston celtics'},
+                  'España':{'espana','spain','seleccion espanola'}}
     else:
         return None
     return next((nombre for nombre,alias in grupos.items() if equipos & alias),None)

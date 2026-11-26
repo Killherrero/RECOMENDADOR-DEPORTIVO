@@ -8,7 +8,18 @@ def valorar_cruce(evento, contexto, cartel):
     datos = evento['contexto']
     objetivo = 0.0
     motivo = ''
-    if datos.get('tipo') == 'tenis':
+    if datos.get('tipo') == 'europa':
+        equipos = [datos[k] for k in ('local', 'visitante')]
+        # Solo moderar si hay evidencia de ambos; un rival desconocido no se castiga.
+        if contexto.get('moderacion_champions'):
+            ajuste = round(min(0, .5 - cartel), 2)
+            return {'ajuste':ajuste, 'objetivo':.5,
+                    'motivos':['Reconocimiento moderado por contraste europeo validado'] if ajuste else []}
+        if all(e['jugados'] >= 3 and e['victorias']/e['jugados'] >= .5 for e in equipos):
+            peor = max(e['posicion'] for e in equipos)
+            objetivo = 2.2 if peor <= 8 else 1.8 if peor <= 12 else 0
+        motivo = 'Calidad conjunta europea: rendimiento contrastado de ambos clubes'
+    elif datos.get('tipo') == 'tenis':
         mejor, peor = sorted(datos[k]['ranking'] for k in ('local', 'visitante'))
         # Cuenta el nivel de ambos. Un top-10 frente al 150 no activa el cruce.
         objetivo = (2.8 if peor <= 10 else 2.5 if peor <= 20 else

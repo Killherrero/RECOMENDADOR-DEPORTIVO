@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 
 from .config import MADRID_TZ
-from .contexto_fuentes import fecha_iso, temporada, liga_evento
+from .contexto_fuentes import fecha_iso, temporada, liga_evento, LIGAS_UEFA
 from .perfiles import normalizar
 
 
@@ -121,10 +121,11 @@ def valorar_contexto(evento):
                 raise ValueError()
             if not e['fuentes']:
                 raise ValueError()
-        if c.get('tipo') == 'champions':
-            if c.get('competicion') != 'uefa.champions' or any(
+        if c.get('tipo') in ('champions','europa'):
+            if (c.get('competicion') not in LIGAS_UEFA
+                    or (c.get('tipo') == 'champions') != (c.get('competicion') == 'uefa.champions')) or any(
                     e.get('fase_competicion') != 'league phase' or e.get('temporada_fuente') != temporada(inicio)
-                    or not 3 <= e['jugados'] <= 8 or not 1 <= e['posicion'] <= 36 or e.get('puntos') != e['victorias']*3 + e['jugados']-e['victorias']-e['derrotas']
+                    or not 3 <= e['jugados'] <= LIGAS_UEFA[c['competicion']] or not 1 <= e['posicion'] <= 36 or e.get('puntos') != e['victorias']*3 + e['jugados']-e['victorias']-e['derrotas']
                     for e in equipos):
                 raise ValueError('Fase, edición o muestra Champions sin validar')
             ajuste = max(.4 if any(e['victorias']/e['jugados'] >= .75 for e in equipos) else 0,
