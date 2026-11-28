@@ -355,7 +355,7 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
     
     
         # WNBA no es NBA: excluirla antes de cualquier filtro amplio de baloncesto.
-        if not programable(e):
+        if not programable(e) and estado_evento(e) != 'condicional':
             descartar(e, 'Evento ' + estado_evento(e))
             continue
         padel = final_padel_espana(e)
@@ -436,6 +436,10 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
             continue
     
         if deporte == "Tenis":
+            from .davis import eliminatoria_davis
+            if eliminatoria_davis(e):
+                filtered_events.append(e)
+                continue
             categoria, _ = categoria_tenis(e)
             from .contexto import valorar_contexto
             jugadores = valorar_contexto(e).get('jugadores', {})
@@ -453,13 +457,15 @@ def recomendar_eventos(events, ahora=None, fecha=None, preseleccion_tenis=False)
         e['ajuste_horario'] = e['desglose']['horario']
         e['channel'] = select_preferred_channel(e['canales'])
         if e['deporte'] == 'Tenis':
-            e['categoria_reconocida'], e['origen_categoria'] = categoria_tenis(e)
+            from .davis import eliminatoria_davis
+            davis = eliminatoria_davis(e)
+            e['categoria_reconocida'], e['origen_categoria'] = ('Copa Davis', 'Competición por selecciones') if davis else categoria_tenis(e)
             e['avisos_datos'] = [] if e['categoria_reconocida'] else ['Categoría sin identificar; no se resta por falta de datos.']
     filtered_events.sort(key=orden_inicio)
     daily_plan, selected_events = build_daily_plan(filtered_events)
     visible_plan_keys = {event_key(e) for e in daily_plan.values()}
     other_top_events = [e for e in filtered_events
-                        if event_key(e) not in visible_plan_keys and e['score'] >= UMBRAL_ALTERNATIVAS]
+                        if programable(e) and event_key(e) not in visible_plan_keys and e['score'] >= UMBRAL_ALTERNATIVAS]
     other_top_events.sort(key=lambda e: (-e.get('prioridad',e['score']),-e['score'], orden_inicio(e)))
     from .explicaciones import explicar_agenda
     explicar_agenda(filtered_events, daily_plan, event_key)

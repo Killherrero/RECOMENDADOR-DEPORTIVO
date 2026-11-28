@@ -11,6 +11,9 @@ def linea_evento(event):
     hora = event['inicio'].strftime('%d/%m %H:%M') if 'inicio' in event else event['hora']
     canales = ' · '.join(canal_texto(c) for c in event.get('canales') or [event.get('channel') or 'Canal no indicado'])
     texto = f"{hora} · {title} · {canales} · {nota_texto(event)}"
+    from .estado_eventos import estado_evento
+    if estado_evento(event) == 'condicional':
+        texto += ' · Si es necesario; horario orientativo'
     if event.get('nivel'):
         texto += f" · {event['nivel']}"
     if event.get('categoria_reconocida'):
@@ -39,6 +42,8 @@ def contenido(resultado):
         sections.append(('Avisos de ejecución', [f'{name.capitalize()}: {message}' for name, message in resultado['errores'].items()]))
     shirt = resultado['camiseta']
     if shirt is not None:
+        if shirt.get('avisos'):
+            sections.append(('Cobertura de camisetas', shirt['avisos']))
         item = shirt['camiseta']
         lines = [describir_camiseta(item)]
         match = shirt.get('partido_asociado')
@@ -119,13 +124,16 @@ def generar_informe(resultado):
     todos = sorted((resultado['eventos'] or {}).get('filtrados', []), key=orden_inicio)
     html = crear_html(subject, sections, resultado, todos)
     listado = pagina(f'Todos los eventos filtrados — {day}/{month}/{year}', listado_completo(todos)) if resultado['eventos'] is not None else None
-    return {'asunto': subject, 'texto': plain, 'html': html, 'listado_html':listado, 'diagnostico':(resultado.get('eventos') or {}).get('diagnostico')}
+    return {'asunto': subject, 'texto': plain, 'html': html, 'listado_html':listado, 'diagnostico':(resultado.get('eventos') or {}).get('diagnostico'), 'diagnostico_camisetas':(resultado.get('camiseta') or {}).get('diagnostico_api')}
 
 def guardar_informe(informe, carpeta):
     carpeta = Path(carpeta)
     carpeta.mkdir(parents=True, exist_ok=True)
     for nombre, value in [('resumen.html', informe['html']), ('resumen.txt', informe['texto'])]:
         (carpeta / nombre).write_text(value, encoding='utf-8')
+    if informe.get('diagnostico_camisetas'):
+        import json
+        (carpeta/'diagnostico_camisetas.json').write_text(json.dumps(informe['diagnostico_camisetas'],ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     if informe.get('diagnostico'):
         import json
         from .diagnostico import html_diagnostico

@@ -32,7 +32,7 @@ class MejorasEventosTests(unittest.TestCase):
         scores=[calculate_score(evento(name,'Real Madrid')) for name in
                 ['Atlético de Madrid','At. Madrid','Atlético Madrid','atletico madrid']]
         for score in scores:
-            self.assertAlmostEqual(score,9.0)
+            self.assertAlmostEqual(score,10.0)
 
     def test_alias_internacionales(self):
         for names in [('Manchester United','Manchester Utd.','Man Utd'),

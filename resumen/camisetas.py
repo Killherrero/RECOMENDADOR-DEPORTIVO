@@ -36,11 +36,18 @@ def parametros_fecha(fecha):
     return {'dateFrom': inicio.date().isoformat(),
             'dateTo': (fin.date() + timedelta(days=1)).isoformat()}
 
+class PartidosAPI(list):
+    def __init__(self):
+        super().__init__()
+        self.descartados = []
+
+
 def interpretar_partidos(payload, fecha):
     if not isinstance(payload, dict) or not isinstance(payload.get('matches'), list):
         raise ErrorCamisetas('La API no devolvió una lista de partidos válida.')
-    result = []
-    for match in payload['matches']:
+    result = PartidosAPI()
+    for indice, match in enumerate(payload['matches']):
+        campo = 'utcDate'
         try:
             instante = datetime.fromisoformat(match['utcDate'].replace('Z', '+00:00'))
             if instante.tzinfo is None:
@@ -48,14 +55,25 @@ def interpretar_partidos(payload, fecha):
             local = instante.astimezone(MADRID_TZ)
             if local.date() != fecha:
                 continue
-            home, away, competition = (match['homeTeam']['name'], match['awayTeam']['name'],
-                                        match['competition']['name'])
-            if not all(isinstance(v, str) and v.strip() for v in (home, away, competition)):
-                raise ValueError
+            valores = []
+            for bloque in ('homeTeam','awayTeam','competition'):
+                campo = bloque + '.name'
+                valor = match[bloque]['name']
+                if not isinstance(valor, str) or not valor.strip():
+                    raise ValueError
+                valores.append(valor)
+            home, away, competition = valores
             result.append({'home': home, 'away': away, 'hora': local, 'competition': competition,
                            'status': match.get('status')})
         except (KeyError, TypeError, ValueError, AttributeError):
-            raise ErrorCamisetas('La API devolvió un partido con datos incompletos o inválidos.') from None
+            identificador = match.get('id') if isinstance(match, dict) else None
+            detalle = {'indice':indice, 'campo':campo, 'motivo':'dato_incompleto_o_invalido'}
+            if type(identificador) is int and identificador >= 0:
+                detalle['partido_id'] = identificador
+            result.descartados.append(detalle)
+    if result.descartados and not result:
+        logger.warning('API sin partidos utilizables; descartados: %s', result.descartados)
+        raise ErrorCamisetas('La API devolvió un partido con datos incompletos o inválidos.')
     return result
 
 def obtener_partidos_hoy(api_key, ahora=None):
@@ -90,6 +108,8 @@ def obtener_partidos_hoy(api_key, ahora=None):
             raise ErrorCamisetas('La API no devolvió JSON válido.') from None
         matches = interpretar_partidos(payload, fecha)
         logger.info('Consulta correcta: %s partidos para %s en Madrid.', len(matches), fecha)
+        if matches.descartados:
+            logger.warning('API parcial: %s registros omitidos. Diagnóstico: %s', len(matches.descartados), matches.descartados)
         return matches
 
 def seleccionar_camiseta(coleccion, partidos, rng=None):
@@ -105,5 +125,8 @@ def generar_resultado(api_key, ahora=None):
     collection = cargar_coleccion()
     matches = obtener_partidos_hoy(api_key, ahora)
     shirt, matches = seleccionar_camiseta(collection, matches)
+    descartados = getattr(matches, 'descartados', [])
     return {'fecha': ahora.astimezone(MADRID_TZ).date().isoformat(), 'camiseta': shirt,
-            'partidos': partidos_visibles(matches, ahora)}
+            'partidos': partidos_visibles(matches, ahora),
+            'diagnostico_api':{'validos':len(matches), 'descartados':descartados},
+            'avisos':([f'Cobertura parcial de camisetas: {len(descartados)} registros inválidos omitidos; se conservan los partidos válidos.'] if descartados else [])}

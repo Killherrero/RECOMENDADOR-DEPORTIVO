@@ -517,6 +517,10 @@ def enriquecer_eventos(eventos, ahora):
             continue
         liga = liga_evento(e)
         if e.get('deporte') == 'Tenis':
+            from .davis import eliminatoria_davis
+            if eliminatoria_davis(e):
+                marcar(e, 'sin_datos', 'selecciones_davis_sin_ranking_individual')
+                continue
             liga = 'tenis'
         if e.get('deporte') == 'Fútbol' and 'copa del rey' in normalizar(e['competicion']):
             liga = 'copa'

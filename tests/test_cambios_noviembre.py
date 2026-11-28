@@ -59,7 +59,7 @@ class CambiosNoviembreTests(unittest.TestCase):
   for nombre in ['Estudiantes LP','Estudiantes de Río Cuarto','Estudiantes B']:
    self.assertIsNone(evaluar_evento(e(nombre))['favorito_declarado'])
   for nombre in ['Roma','Borussia Dortmund','Atlético de Madrid','Aston Villa']:
-   self.assertEqual(evaluar_evento(e(nombre))['desglose']['afinidad'],1.5)
+   self.assertEqual(evaluar_evento(e(nombre))['desglose']['afinidad'],2.5 if nombre=='Atlético de Madrid' else 1.5)
   self.assertEqual(evaluar_evento(e('AS Roma'))['score'],evaluar_evento(e('Roma'))['score'])
   self.assertEqual(evaluar_evento(e('BVB'))['score'],evaluar_evento(e('Borussia Dortmund'))['score'])
  def test_equipo_favorito_visible_sin_forzar_plan(self):

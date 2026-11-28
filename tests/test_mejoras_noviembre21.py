@@ -61,7 +61,7 @@ class MejorasNoviembre21Tests(unittest.TestCase):
         e = evento('Argentinos Juniors','Independiente','Primera División Argentina 1/8 de Final')
         resultado = evaluar_evento(e)
         self.assertEqual(resultado['desglose']['fase'],1.2)
-        self.assertEqual(resultado['score'],5.4)
+        self.assertEqual(resultado['score'],6.0)
         self.assertEqual(evaluar_evento({**e,'competicion':'Primera División Argentina Torneo Clausura'})['desglose']['fase'],0)
         for cambio in [dict(fecha='2027-11-21'),dict(competicion='Copa Argentina Octavos'),
                        dict(competicion='Primera División Argentina Octavos Ida'),
@@ -70,7 +70,7 @@ class MejorasNoviembre21Tests(unittest.TestCase):
 
     def test_favoritos_siguen_con_su_bonus_completo(self):
         for club in ['Aston Villa','Borussia Dortmund','Roma','Atlético de Madrid']:
-            self.assertEqual(evaluar_evento(evento(club,'Rival','Premier League'))['desglose']['afinidad'],1.5)
+            self.assertEqual(evaluar_evento(evento(club,'Rival','Premier League'))['desglose']['afinidad'],2.5 if club=='Atlético de Madrid' else 1.5)
 
     @patch('resumen.contexto_fuentes.descargar_json', return_value={'season':{'year':2026}})
     def test_brasil_usa_temporada_natural_y_rechaza_otra_edicion(self, descarga):

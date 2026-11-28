@@ -8,6 +8,7 @@ def sesion_motor(evento):
         return None
     texto = normalizar(evento.get('competicion', '') + ' ' + evento.get('descripcion', ''))
     categoria = ('F1' if re.search(r'\b(?:f1|formula\s*1)\b', texto) else
+                 'F2' if re.search(r'\b(?:f2|formula\s*2)\b', texto) else
                  'MotoGP' if re.search(r'\bmotogp\b', texto) else
                  'NASCAR Cup' if re.search(r'\bnascar cup series\b', texto) and 'enascar' not in texto else None)
     if not categoria:
@@ -23,14 +24,21 @@ def sesion_motor(evento):
     else:
         return None
     notas = {'entrenamientos':4.7, 'clasificacion':5.4, 'sprint':6.0, 'carrera':6.4}
+    if categoria == 'F2':
+        notas = {'entrenamientos':2.5, 'clasificacion':3.5, 'sprint':4.2, 'carrera':4.5}
     if categoria == 'MotoGP':
         notas = {**notas, 'entrenamientos':4.0, 'clasificacion':5.0}
     if categoria == 'NASCAR Cup':
         notas = {'entrenamientos':3.5, 'clasificacion':4.2, 'sprint':5.2, 'carrera':5.2}
     duraciones = {'entrenamientos':75, 'clasificacion':75 if categoria == 'F1' else 60,
                   'sprint':45, 'carrera':150 if categoria == 'F1' else 60}
+    if categoria == 'F2':
+        duraciones = {'entrenamientos':45, 'clasificacion':45, 'sprint':60, 'carrera':90}
     if categoria == 'NASCAR Cup':
         duraciones = {'entrenamientos':75,'clasificacion':75,'sprint':180,'carrera':180}
+    if categoria == 'F2' and re.search(r'\bcarrera 1\b', texto):
+        duraciones['carrera'] = 60
+        notas['carrera'] = 4.2
     return {'categoria':categoria, 'tipo':tipo, 'base':notas[tipo], 'duracion':duraciones[tipo],
             **({'importancia_titulo':'Sin verificar; Championship no añade bonus'} if categoria == 'NASCAR Cup' else {})}
 

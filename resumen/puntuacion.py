@@ -103,8 +103,8 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         if n == 2:motivos.append('Duelo entre equipos de referencia')
         elif n == 1:motivos.append('Participa un equipo de referencia')
         if favorito:
-            afinidad = 1.3
-            motivos.append('Juega uno de tus favoritos')
+            afinidad = 2.3 if favorito == 'Atlético de Madrid' else 1.3
+            motivos.append('Juega tu favorito principal' if favorito == 'Atlético de Madrid' else 'Juega uno de tus favoritos')
         else:
             afinidad = max(0, afinidad_previa) * 0.7
         afinidad += 0.2 # Preferencia habitual por fútbol, sin veto a otros deportes.
@@ -208,18 +208,31 @@ def valorar(evento, local, visitante, competicion, afinidad_previa=0, derby=0, r
         motivos.append({2.5:'Final',2.0:'Semifinal',1.5:'Cuartos de final',1.0:'Octavos de final',.8:'Dieciseisavos de final'}.get(ronda,'Fase de eliminatoria'))
     fase_verificada = ({'nombre':'Octavos: cuadro de 32 confirmado', 'fuente':catalogo_tenis()['fuente']}
                        if segunda_ronda_octavos(evento) else None)
-    calidad = valorar_cruce(evento, contexto, cartel)
+    from .davis import eliminatoria_davis
+    davis = eliminatoria_davis(evento)
+    if davis:
+        base, cartel = 5.6, 0
+        fase = {'cuartos':1.0, 'semifinal':1.6, 'final':2.4}[davis['fase']]
+        afinidad = PREFERENCIA_TENIS + (1.6 if davis['espana'] else 0)
+        contexto = {'ajuste':0, 'estado':'sin datos', 'fuentes':[], 'motivos':[]}
+        motivos = ['Copa Davis absoluta: eliminatoria por selecciones', 'España en Copa Davis' if davis['espana'] else 'Valoración neutral de selecciones']
+    calidad = valorar_cruce(evento, contexto, cartel, eliminatoria_argentina)
     rivalidad = valorar_rivalidad(evento)
     if rivalidad['ajuste']:
         motivos.append(f"{rivalidad['tipo']}: {rivalidad['nombre']}")
     motivos.extend(contexto['motivos'])
     motivos.extend(calidad['motivos'])
-    deportivo_basico = round(min(8.5, base + cartel - jerarquia + fase + rivalidad['ajuste']),2)
+    final_continental = (sport == 'Fútbol' and fase == 2.4
+                         and competicion.startswith(('champions league','uefa champions league','europa league','uefa europa league','conference league','uefa conference league','copa libertadores','conmebol libertadores'))
+                         and not re.search(r'\b(?:youth|sub[ -]?\d+|u[ -]?\d+|juvenil|junior|women|femenin[oa])\b', competicion))
+    techo = 9.5 if final_continental else 8.5
+    suelo = 8.8 if final_continental else 0
+    deportivo_basico = round(max(suelo,min(techo, base + cartel - jerarquia + fase + rivalidad['ajuste'])),2)
     afinidad_basica = round(max(-deportivo_basico, min(10-deportivo_basico, afinidad)),2)
     nota_basica = round(max(0, min(10, deportivo_basico + afinidad_basica)), 1)
     afinidad += contexto.get('afinidad', 0)
     ajuste_grupo = (seleccion or {}).get('ajuste_grupo', 0)
-    deportivo = round(min(8.5,base + cartel + fase + contexto['ajuste'] + calidad['ajuste'] + rivalidad['ajuste'] + ajuste_grupo),2)
+    deportivo = round(max(suelo,min(techo,base + cartel + fase + contexto['ajuste'] + calidad['ajuste'] + rivalidad['ajuste'] + ajuste_grupo)),2)
     afinidad = round(max(-deportivo,min(10-deportivo,afinidad)),2)
     nota = round(max(0,min(10,deportivo+afinidad)),1)
     canales = evento.get('canales',[])

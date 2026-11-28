@@ -1,14 +1,32 @@
 """Calidad conjunta: complemento mínimo, nunca suma de señales equivalentes."""
 
 
-def valorar_cruce(evento, contexto, cartel):
+def valorar_cruce(evento, contexto, cartel, eliminatoria_argentina=None):
     resultado = {'ajuste': 0.0, 'objetivo': 0.0, 'motivos': []}
+    if eliminatoria_argentina:
+        from .reconocimiento import perfiles_futbol
+        perfiles = perfiles_futbol(evento)
+        if len({p['lado'] for p in perfiles if p['puntos'] >= .35}) == 2:
+            objetivo = 1.8 if all(p['puntos'] >= .65 for p in perfiles) else 1.3
+            return dict(ajuste=round(max(0,objetivo-cartel),2), objetivo=objetivo,
+                        motivos=['Calidad editorial conjunta en eliminatoria argentina; no implica forma actual'])
     if contexto.get('estado') != 'validado':
         return resultado
     datos = evento['contexto']
     objetivo = 0.0
     motivo = ''
-    if datos.get('tipo') == 'europa':
+    if evento['deporte'] == 'Fútbol' and datos.get('competicion') in ('esp.1','eng.1','ita.1','ger.1','fra.1'):
+        equipos = [datos[k] for k in ('local','visitante')]
+        if all(e['jugados'] >= 8 for e in equipos):
+            fuerte,debil = sorted(equipos,key=lambda e:e['posicion'])
+            if (debil['posicion']-fuerte['posicion'] >= 10 and fuerte['victorias']/fuerte['jugados'] >= .65
+                    and debil['victorias']/debil['jugados'] <= .2):
+                ajuste=round(min(0,1.2-cartel-contexto['ajuste']),2)
+                return dict(ajuste=ajuste,objetivo=1.2,motivos=['Extra moderado por desequilibrio doméstico validado'] if ajuste else [])
+            if all(e['posicion'] <= 8 and e['victorias']/e['jugados'] >= .35 for e in equipos):
+                objetivo = 1.8 if all(e['posicion'] <= 6 and e['victorias']/e['jugados'] >= .5 for e in equipos) else 1.2
+        motivo = 'Calidad conjunta de liga doméstica contrastada; catálogo y forma no se duplican'
+    elif datos.get('tipo') == 'europa':
         equipos = [datos[k] for k in ('local', 'visitante')]
         # Solo moderar si hay evidencia de ambos; un rival desconocido no se castiga.
         if contexto.get('moderacion_champions'):

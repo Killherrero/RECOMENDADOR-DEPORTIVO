@@ -18,7 +18,7 @@ class EventosTests(unittest.TestCase):
         events = json.loads((ROOT/'tests/fixtures/eventos.json').read_text(encoding='utf-8'))
         original_input = copy.deepcopy(events)
         new = recomendar_eventos(events)
-        self.assertEqual(new['plan']['imprescindible']['local'], 'Liverpool')
+        self.assertEqual(new['plan']['imprescindible']['local'], 'At. Madrid')
         self.assertTrue(all(0 <= e['score'] <= 10 for e in new['filtrados']))
         self.assertEqual(len(new['plan']),len(new['seleccionados']))
         self.assertEqual([e['hora'] for e in new['alternativas']],

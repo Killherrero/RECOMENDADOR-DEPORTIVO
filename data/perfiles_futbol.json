@@ -94,9 +94,9 @@
       "independiente",
       "ca independiente"
     ],
-    "puntos": 0.35,
+    "puntos": 0.65,
     "fuente": "https://www.afa.com.ar/11438/pages/campeones-de-primera-division",
-    "verificado": "2026-11-07",
+    "verificado": "2026-11-28",
     "ambito": "argentina"
   },
   {
@@ -367,6 +367,30 @@
     "nivel": "referente",
     "fuente": "https://www.cbf.com.br/futebol-brasileiro/noticias/detalhes/noticias/flamengo-vence-palmeiras-e-ganha-o-tetra-da-libertadores",
     "verificado": "2026-11-21",
+    "ambito": "clubes"
+  },
+  {
+    "nombre": "Vélez Sarsfield",
+    "alias": [
+      "velez",
+      "velez sarsfield",
+      "ca velez sarsfield"
+    ],
+    "puntos": 0.65,
+    "fuente": "https://velez.ar/futbol/titulos",
+    "verificado": "2026-11-28",
+    "ambito": "argentina"
+  },
+  {
+    "nombre": "Eintracht Frankfurt",
+    "alias": [
+      "eintracht frankfurt",
+      "eintracht",
+      "frankfurt"
+    ],
+    "puntos": 0.35,
+    "fuente": "https://history.eintracht.de/history-museum/trophies-records/",
+    "verificado": "2026-11-28",
     "ambito": "clubes"
   }
 ]

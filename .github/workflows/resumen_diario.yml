@@ -61,6 +61,7 @@ jobs:
         with:
           name: diagnostico-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
+            vista_previa/diagnostico_camisetas.json
             vista_previa/diagnostico.json
             vista_previa/diagnostico.html
             vista_previa/envio.json

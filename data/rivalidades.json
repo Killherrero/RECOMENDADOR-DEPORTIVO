@@ -741,5 +741,19 @@
     "verificado": "2026-11-21",
     "ambito": "clubes",
     "region": "Países Bajos"
+  },
+  {
+    "deporte": "Fútbol",
+    "equipos": [
+      "hamburger sv",
+      "bayern munich"
+    ],
+    "tipo": "Rivalidad histórica",
+    "nombre": "Nord-Süd-Gipfel",
+    "bonus": 0.5,
+    "fuente": "https://www.bundesliga.com/en/bundesliga/news/bayern-munich-hamburg-historic-rivalry-rekindled-33905",
+    "verificado": "2026-11-28",
+    "ambito": "clubes",
+    "region": "Alemania"
   }
 ]

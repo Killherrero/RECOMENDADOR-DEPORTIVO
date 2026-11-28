@@ -17,6 +17,11 @@ def estado_evento(evento):
             return estado
     if any(normalizar(str(evento.get(k,''))) in ('por confirmar','pendiente','tbd') for k in ('estado','status','hora')):
         return 'sin fecha confirmada'
+    from .davis import eliminatoria_davis
+    davis = eliminatoria_davis(evento)
+    en_directo = normalizar(str(evento.get('estado',''))) in ('en curso','live','in progress')
+    if davis and davis['condicional'] and evento.get('confirmado') is not True and not en_directo:
+        return 'condicional'
     return 'programado'
 
 

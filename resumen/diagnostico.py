@@ -26,7 +26,7 @@ def version_modelo():
     h = hashlib.sha256()
     for nombre in ('puntuacion.py', 'calidad_cruce.py', 'rivalidades.py', 'calendario.py', 'planning.py', 'contexto.py', 'perfiles.py', 'preferencias_eventos.py',
                    'contexto_fuentes.py', 'fuente_eventos.py', 'eventos.py', 'horarios.py', 'categorias.py', 'canales.py',
-                   'estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py','ligas.py','ncaa.py','selecciones.py','fuentes_selecciones.py','contexto_internacional.py','contexto_nba_directo.py'):
+                   'davis.py','estado_eventos.py','sesiones.py','favoritos.py','reconocimiento.py','ligas.py','ncaa.py','selecciones.py','fuentes_selecciones.py','contexto_internacional.py','contexto_nba_directo.py'):
         h.update(nombre.encode())
         h.update((ROOT/'resumen'/nombre).read_bytes().replace(b'\r\n', b'\n'))
     for p in sorted((ROOT/'data').glob('*.json')):
@@ -42,7 +42,7 @@ def serializar(valor):
 
 
 def preparar_diagnostico(eventos, ahora):
-    campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente',
+    campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente','confirmado',
               'contexto','contexto_selecciones','diagnostico_contexto','score','prioridad','desglose','evaluacion_contexto','evaluacion_rivalidad','evaluacion_fase','evaluacion_selecciones','eliminatoria_argentina',
               'motivos','inicio','fin_estimado','inicio_vision','fin_vision','vision_parcial')
     registros = [{k:e[k] for k in campos if k in e} for e in eventos.get('filtrados', [])]
@@ -92,7 +92,7 @@ def reproducir(snapshot):
     if snapshot['modelo'] != version_modelo():
         raise ValueError('La instantánea corresponde a otra versión del modelo.')
     entradas = []
-    campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente',
+    campos = ('hora','fecha','deporte','competicion','local','visitante','descripcion','canales','estado','estado_fuente','confirmado',
               'contexto','contexto_selecciones','diagnostico_contexto')
     for e in snapshot['eventos']:
         entradas.append({k:e[k] for k in campos if k in e})

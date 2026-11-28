@@ -26,6 +26,9 @@ def canales_html(evento):
     return ' '.join(badges)
 
 def categoria_html(evento):
+    from .estado_eventos import estado_evento
+    if estado_evento(evento) == 'condicional':
+        return etiqueta('Si es necesario · hora orientativa', '#fff1db', '#744915')
     if evento.get('categoria_reconocida'):
         return etiqueta(evento['categoria_reconocida'])
     if evento.get('deporte') == 'Tenis' and 'origen_categoria' in evento:

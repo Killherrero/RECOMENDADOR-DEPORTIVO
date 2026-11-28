@@ -1,0 +1,146 @@
+[
+  {
+    "fecha": "2026-11-28",
+    "hora": "18:30",
+    "deporte": "Fútbol",
+    "local": "Elche",
+    "visitante": "At. Madrid",
+    "competicion": "La Liga EA Sports",
+    "canales": [
+      "M+ LALIGA (M54 O110)",
+      "Movistar Plus+ (M8): VER PARTIDO",
+      "Orange Fútbol 1 (107)",
+      "M+ LALIGA HDR (M440 O111)",
+      "M+ LALIGA 2 (M57 O112)",
+      "LaLiga TV Bar"
+    ],
+    "contexto": {
+      "consultado": "2026-11-28T10:46:52.895616+01:00",
+      "temporada": 2026,
+      "competicion": "esp.1",
+      "local": {
+        "nombre": "Elche",
+        "id": "3751",
+        "posicion": 19,
+        "jugados": 13,
+        "victorias": 2,
+        "derrotas": 6,
+        "forma": "DLLWD",
+        "fuentes": [
+          "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/3751/schedule?season=2026"
+        ],
+        "temporada_fuente": 2026,
+        "ultimo_partido": "2026-11-23T20:00:00+00:00"
+      },
+      "visitante": {
+        "nombre": "At. Madrid",
+        "id": "1068",
+        "posicion": 3,
+        "jugados": 13,
+        "victorias": 10,
+        "derrotas": 2,
+        "forma": "WLWWW",
+        "fuentes": [
+          "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/1068/schedule?season=2026"
+        ],
+        "temporada_fuente": 2026,
+        "ultimo_partido": "2026-11-22T20:00:00+00:00"
+      }
+    }
+  },
+  {
+    "fecha": "2026-11-28",
+    "hora": "18:30",
+    "deporte": "Fútbol",
+    "local": "Stuttgart",
+    "visitante": "Eintracht Frankfurt",
+    "competicion": "Bundesliga",
+    "canales": [
+      "DAZN (Ver en directo)"
+    ],
+    "contexto": {
+      "consultado": "2026-11-28T10:46:52.895616+01:00",
+      "temporada": 2026,
+      "competicion": "ger.1",
+      "local": {
+        "nombre": "Stuttgart",
+        "id": "134",
+        "posicion": 8,
+        "jugados": 10,
+        "victorias": 4,
+        "derrotas": 5,
+        "forma": "DWWLL",
+        "fuentes": [
+          "https://site.web.api.espn.com/apis/v2/sports/soccer/ger.1/standings",
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/ger.1/teams/134/schedule?season=2026"
+        ],
+        "temporada_fuente": 2026,
+        "ultimo_partido": "2026-11-21T17:30:00+00:00"
+      },
+      "visitante": {
+        "nombre": "Eintracht Frankfurt",
+        "id": "125",
+        "posicion": 7,
+        "jugados": 10,
+        "victorias": 4,
+        "derrotas": 3,
+        "forma": "WDWLW",
+        "fuentes": [
+          "https://site.web.api.espn.com/apis/v2/sports/soccer/ger.1/standings",
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/ger.1/teams/125/schedule?season=2026"
+        ],
+        "temporada_fuente": 2026,
+        "ultimo_partido": "2026-11-21T14:30:00+00:00"
+      }
+    }
+  },
+  {
+    "fecha": "2026-11-28",
+    "hora": "20:45",
+    "deporte": "Fútbol",
+    "local": "PSG",
+    "visitante": "Lorient",
+    "competicion": "Francia Ligue 1",
+    "canales": [
+      "DAZN (Ver en directo)",
+      "TV5MONDE"
+    ],
+    "contexto": {
+      "consultado": "2026-11-28T10:46:52.895616+01:00",
+      "temporada": 2026,
+      "competicion": "fra.1",
+      "local": {
+        "nombre": "PSG",
+        "id": "160",
+        "posicion": 1,
+        "jugados": 11,
+        "victorias": 8,
+        "derrotas": 1,
+        "forma": "WWWWW",
+        "fuentes": [
+          "https://site.web.api.espn.com/apis/v2/sports/soccer/fra.1/standings",
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.1/teams/160/schedule?season=2026"
+        ],
+        "temporada_fuente": 2026,
+        "ultimo_partido": "2026-11-21T16:15:00+00:00"
+      },
+      "visitante": {
+        "nombre": "Lorient",
+        "id": "273",
+        "posicion": 10,
+        "jugados": 11,
+        "victorias": 4,
+        "derrotas": 3,
+        "forma": "DWLDW",
+        "fuentes": [
+          "https://site.web.api.espn.com/apis/v2/sports/soccer/fra.1/standings",
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.1/teams/273/schedule?season=2026"
+        ],
+        "temporada_fuente": 2026,
+        "ultimo_partido": "2026-11-22T16:15:00+00:00"
+      }
+    }
+  }
+]
